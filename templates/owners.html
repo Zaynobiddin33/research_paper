@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{%load static%}
+
+{%block style%}
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+      color: #1f2937;
+      overflow-x: hidden;
+      padding-top: 72px;
+    }
+
+    /* Navbar */
+    nav {
+      background-color: #ffffff;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .navbar-brand {
+      font-weight: 700;
+      color: #2563eb !important;
+      letter-spacing: -0.3px;
+    }
+
+    /* Section */
+    .hero {
+      text-align: center;
+      padding: 100px 20px 60px;
+      background: linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .hero p {
+      color: #4b5563;
+      font-size: 1.05rem;
+      max-width: 680px;
+      margin: 12px auto 0;
+    }
+
+    /* Creators */
+    .creator-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      text-align: center;
+      padding: 30px 20px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 100%;
+    }
+
+    .creator-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    }
+
+    .creator-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border: 3px solid #2563eb;
+    }
+
+    .creator-card h5 {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .creator-role {
+      color: #6b7280;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+
+    .social-links a {
+      display: inline-block;
+      margin: 0 6px;
+      font-size: 1.2rem;
+      color: #2563eb;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .social-links a:hover {
+      color: #1e40af;
+    }
+
+    footer {
+      text-align: center;
+      padding: 50px 0 30px;
+      background: #111827;
+      color: #e5e7eb;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 768px) {
+      .hero { padding: 80px 16px; }
+    }
+  </style>
+
+{%endblock%}
+
+
+{%block content%}
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>Meet the Creators</h1>
+      <p>The minds behind ResearchConnect — passionate developers, designers, and researchers dedicated to building a smarter academic future.</p>
+    </div>
+  </section>
+
+  <!-- Creators Grid -->
+  <section class="container my-5">
+    <div class="row g-4 justify-content-center">
+      <div class="col-12 col-sm-6 col-lg-4 d-flex">
+        <div class="creator-card flex-fill">
+          <img src="https://via.placeholder.com/120" alt="Creator" class="creator-img">
+          <h5>Zaynobiddin Shoxobiddinov</h5>
+          <p class="creator-role">Developer</p>
+          <p class="small text-muted">Built the platform’s backend and API integrations with Django and PostgreSQL.</p>
+          <div class="social-links">
+            <a href="#"><i class="bi bi-github"></i></a>
+            <a href="#"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-4 d-flex">
+        <div class="creator-card flex-fill">
+          <img src="https://via.placeholder.com/120" alt="Creator" class="creator-img">
+          <h5>Sarah Kim</h5>
+          <p class="creator-role">UI/UX Designer</p>
+          <p class="small text-muted">Crafted the elegant, user-friendly interface with a focus on simplicity and clarity.</p>
+          <div class="social-links">
+            <a href="#"><i class="bi bi-dribbble"></i></a>
+            <a href="#"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-sm-6 col-lg-4 d-flex">
+        <div class="creator-card flex-fill">
+          <img src="https://via.placeholder.com/120" alt="Creator" class="creator-img">
+          <h5>Ali Rahman</h5>
+          <p class="creator-role">Machine Learning Engineer</p>
+          <p class="small text-muted">Developed recommendation algorithms to help users find the most relevant research.</p>
+          <div class="social-links">
+            <a href="#"><i class="bi bi-github"></i></a>
+            <a href="#"><i class="bi bi-twitter"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{%endblock%}

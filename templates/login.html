@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{%load static%}
+
+{%block style%}
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{%endblock%}
+
+{%block content%}
+<section class="flex justify-center items-center min-h-[85vh] px-4" style="height: 90vh;">
+    <div class="bg-white shadow-md rounded-2xl p-8 w-full max-w-md">
+      <h1 class="text-2xl font-bold text-center mb-6">Log in Your Account</h1>
+
+      <!-- Register Form -->
+       {% if messages %}
+      <div>
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} text-center py-2">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <form action="" method="POST" class="space-y-4">
+        {%csrf_token%}
+        <div>
+          <label for="username" class="block text-sm font-medium text-gray-600">Login</label>
+          <input type="text" id="username" name="username" required
+                 class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-600">Parol</label>
+          <input type="password" id="password" name="password" required
+                 class="mt-1 w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+
+        <!-- CAPTCHA -->
+        <div class="flex justify-center my-4">
+          <div class="bg-gray-100 p-3 rounded-lg border border-gray-300 w-full flex justify-center">
+            <p class="text-gray-500 text-sm">[ CAPTCHA Widget Here ]</p>
+          </div>
+        </div>
+
+        <button type="submit"
+                class="w-full bg-blue-600 text-white py-2 rounded-xl font-medium hover:bg-blue-700 transition">
+          Register
+        </button>
+
+        <p class="text-center text-sm text-gray-500 mt-4">
+          Already have an account?
+          <a href="/login" class="text-blue-600 hover:underline">Login</a>
+        </p>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    // Avatar live preview
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarPreview = document.getElementById('avatarPreview');
+
+    avatarInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          avatarPreview.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+
+{%endblock%}
