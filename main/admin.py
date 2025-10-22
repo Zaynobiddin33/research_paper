@@ -5,3 +5,5 @@ from . import models
 
 admin.site.register(models.Category)
 admin.site.register(models.Paper)
+admin.site.register(models.Otp)
+admin.site.register(models.Creator)

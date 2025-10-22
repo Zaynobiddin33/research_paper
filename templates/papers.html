@@ -105,7 +105,7 @@
             {%elif paper.status == 3%}
             <span class="status-badge status-decline">Rad etilgan</span>
             {%elif paper.status == 4%}
-            <span class="status-badge status-published]">Nashr etilgan</span>
+            <span class="status-badge status-published">Nashr etilgan</span>
             {%endif%}
 
             <h5 class="card-title mt-2" style="min-height: 50px;">{{paper.title|truncatewords:6}}</h5>
@@ -113,7 +113,7 @@
             <p style="min-height: 90px;">{{paper.intro|truncatewords:20}}</p>
             <a href="{%url 'my_paper' paper.id%}" class="text-primary fw-semibold">Batafsil ko'rish →</a>
             {%if paper.status == 1%}
-            <a style="width: 100%;" href="#" class="btn btn-sm btn-primary mt-3">Tekshirtirish →</a>
+            <a style="width: 100%;" href="{%url 'apply_otp' paper.id%}" class="btn btn-sm btn-primary mt-3">Tekshirtirish →</a>
             {%endif%}
           </div>
         </div>
@@ -124,6 +124,6 @@
   </section>
 
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
 
 {%endblock%}

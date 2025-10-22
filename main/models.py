@@ -26,7 +26,31 @@ class Paper(models.Model):
     pages = models.IntegerField()
     organization = models.CharField(max_length=250)
 
+    def __str__(self):
+        return self.title
+
 class Otp(models.Model):
-    code = models.IntegerField()
-    paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=True)
+    code = models.IntegerField(unique=True)
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.paper:
+            paper = Paper.objects.get(id = self.paper.id)
+            paper.status+=1
+            paper.save()
+        return super().save( *args, **kwargs)
+
+class Creator(models.Model):
+    name = models.CharField(max_length=255)
+    role = models.CharField(max_length=100)
+    description = models.TextField()
+    image = models.ImageField(upload_to='creators/')
+    instagram = models.URLField(null=True, blank=True)
+    telegram = models.URLField(null=True, blank=True)
+    github = models.URLField(null=True, blank=True)
+    linkedin = models.URLField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+    
 

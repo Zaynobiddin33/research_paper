@@ -114,52 +114,28 @@
   <!-- Hero -->
   <section class="hero">
     <div class="container">
-      <h1>Meet the Creators</h1>
-      <p>The minds behind ResearchConnect — passionate developers, designers, and researchers dedicated to building a smarter academic future.</p>
+      <h1>Yaratuvchilar</h1>
+      <p>MURA – MU Research Archive ortidagi aqllar - aqlli akademik kelajakni qurishga bag'ishlangan ishtiyoqli ishlab chiquvchilar, dizaynerlar va tadqiqotchilar.</p>
     </div>
   </section>
 
   <!-- Creators Grid -->
   <section class="container my-5">
-    <div class="row g-4 justify-content-center">
-      <div class="col-12 col-sm-6 col-lg-4 d-flex">
+    <div class="row g- justify-content-center">
+      {%for creator in creators%}
+      <div class="col-12 mt-3 col-sm-6 col-lg-3 d-flex">
         <div class="creator-card flex-fill">
-          <img src="https://via.placeholder.com/120" alt="Creator" class="creator-img">
-          <h5>Zaynobiddin Shoxobiddinov</h5>
-          <p class="creator-role">Developer</p>
-          <p class="small text-muted">Built the platform’s backend and API integrations with Django and PostgreSQL.</p>
+          <img src="{{creator.image.url}}" alt="Creator" class="creator-img">
+          <h5>{{creator.name}}</h5>
+          <p class="creator-role">{{creator.role}}</p>
+          <p class="small text-muted">{{creator.description}}</p>
           <div class="social-links">
             <a href="#"><i class="bi bi-github"></i></a>
             <a href="#"><i class="bi bi-linkedin"></i></a>
           </div>
         </div>
       </div>
-
-      <div class="col-12 col-sm-6 col-lg-4 d-flex">
-        <div class="creator-card flex-fill">
-          <img src="https://via.placeholder.com/120" alt="Creator" class="creator-img">
-          <h5>Sarah Kim</h5>
-          <p class="creator-role">UI/UX Designer</p>
-          <p class="small text-muted">Crafted the elegant, user-friendly interface with a focus on simplicity and clarity.</p>
-          <div class="social-links">
-            <a href="#"><i class="bi bi-dribbble"></i></a>
-            <a href="#"><i class="bi bi-linkedin"></i></a>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-sm-6 col-lg-4 d-flex">
-        <div class="creator-card flex-fill">
-          <img src="https://via.placeholder.com/120" alt="Creator" class="creator-img">
-          <h5>Ali Rahman</h5>
-          <p class="creator-role">Machine Learning Engineer</p>
-          <p class="small text-muted">Developed recommendation algorithms to help users find the most relevant research.</p>
-          <div class="social-links">
-            <a href="#"><i class="bi bi-github"></i></a>
-            <a href="#"><i class="bi bi-twitter"></i></a>
-          </div>
-        </div>
-      </div>
+      {%endfor%}
     </div>
   </section>
 

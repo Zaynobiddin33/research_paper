@@ -23,7 +23,8 @@ def about(request):
     return render(request, 'about.html')
 
 def creators(request):
-    return render(request, 'owners.html')
+    creators_all = models.Creator.objects.all()
+    return render(request, 'owners.html', {'creators':creators_all})
 
 def login_view(request):
     if request.method == 'POST':
@@ -133,3 +134,17 @@ def detail_paper(request, id):
     keywords = paper.keywords.split(',')
     return render(request, 'detail.html', {'paper':paper, 'tags':keywords})
 
+@login_required(redirect_field_name='login')
+def apply_otp(request, id):
+    paper = models.Paper.objects.get(id = id)
+    if request.method == 'POST':
+        otp = request.POST['otp']
+        if models.Otp.objects.filter(code = otp).exists() and paper.status == 1:
+            otp = models.Otp.objects.get(code = otp)
+            otp.paper = paper
+            otp.save()
+    return render(request, 'otp.html')
+
+
+            
+            

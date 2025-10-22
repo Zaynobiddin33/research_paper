@@ -15,7 +15,8 @@ urlpatterns = [
     path('my-papers/', views.my_papers, name='my_papers'),
     path('my-paper/<int:id>', views.my_paper, name='my_paper'),
     path('delete-paper/<int:id>', views.delete_paper, name='delete_paper'),
-    path('detail-paper/<int:id>', views.detail_paper, name='detail_paper')
+    path('detail-paper/<int:id>', views.detail_paper, name='detail_paper'),
+    path('apply-otp/<int:id>', views.apply_otp, name = 'apply_otp'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
