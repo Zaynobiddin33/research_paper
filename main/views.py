@@ -9,9 +9,6 @@ from . import models
 from .models import Paper, CustomUser, Category, Creator
 
 
-# Create your views here.
-
-
 class RegisterView(View):
     template_name = 'register.html'
 
@@ -60,7 +57,7 @@ class LoginView(View):
 class LogoutView(LoginRequiredMixin, View):
     login_url = 'login'
 
-    def post(self, request):
+    def get(self, request):
         logout(request)
         return redirect('main')
 

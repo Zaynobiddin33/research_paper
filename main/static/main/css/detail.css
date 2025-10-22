@@ -1,0 +1,256 @@
+:root {
+    --bg: #f9fafb;
+    --text: #111827;
+    --muted: #6b7280;
+    --accent: #2563eb;
+    --card-shadow: 0 6px 20px rgba(17, 24, 39, 0.06);
+    --radius: 14px;
+    --max-width: 980px;
+    --label-width: 110px; /* consistent label column width in sidebar */
+}
+
+html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* fixed navbar space so content is not hidden behind it */
+body {
+    padding-top: 72px;
+}
+
+/* Navbar */
+nav.navbar {
+    background: #fff;
+    box-shadow: 0 1px 6px rgba(2, 6, 23, 0.05);
+}
+
+.navbar-brand {
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: -0.4px;
+}
+
+.nav-link {
+    color: #111827 !important;
+    font-weight: 500;
+}
+
+/* Page container */
+main.container {
+    max-width: var(--max-width);
+    margin-top: 28px;
+    margin-bottom: 56px;
+}
+
+/* Paper header */
+.paper-header {
+    text-align: left;
+    margin-bottom: 22px;
+}
+
+.paper-title {
+    font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+    font-weight: 700;
+    line-height: 1.12;
+    margin-bottom: 6px;
+}
+
+.paper-meta {
+    color: var(--muted);
+    font-size: 0.95rem;
+}
+
+/* Layout: main + sidebar */
+.paper-body {
+    display: block;
+}
+
+@media (min-width: 992px) {
+    .paper-body {
+        display: grid;
+        grid-template-columns: 1fr 320px;
+        gap: 28px;
+        align-items: start;
+    }
+}
+
+/* Content card */
+.content-card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    padding: 28px;
+}
+
+.paper-content {
+    color: #222;
+    line-height: 1.75;
+    font-size: 1.02rem;
+}
+
+/* Sidebar (meta card) - FIXED ALIGNMENT */
+.meta-card {
+    position: relative;
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    padding: 20px;
+    height: fit-content;
+}
+
+/* Use grid inside the meta card for exact label/value alignment */
+.meta-grid {
+    display: grid;
+    grid-template-columns: var(--label-width) 1fr;
+    gap: 10px 12px;
+    align-items: start;
+    row-gap: 14px;
+    width: 100%;
+}
+
+.meta-label {
+    color: var(--muted);
+    font-size: 0.89rem;
+    text-align: left;
+    align-self: center;
+    padding-right: 6px;
+    white-space: nowrap; /* keep labels tidy */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.meta-value {
+    font-weight: 600;
+    color: #111827;
+    font-size: 0.95rem;
+    word-break: break-word; /* allow wrapping for long values without breaking layout */
+    text-align: left;
+}
+
+/* Tags row becomes full-width block (below grid) so tags wrap nicely */
+.meta-tags {
+    margin-top: 6px;
+    grid-column: 1 / -1; /* spans both columns */
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.tag {
+    display: inline-block;
+    background: #f1f5f9;
+    color: #0f172a;
+    padding: 6px 12px;
+    font-size: 0.875rem;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+/* Buttons row spanning full width */
+.meta-actions {
+    grid-column: 1 / -1;
+    margin-top: 14px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.small-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(37, 99, 235, 0.12);
+    background: #fff;
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* Make sidebar sticky on large screens for better UX while reading */
+@media (min-width: 992px) {
+    .meta-card {
+        position: sticky;
+        top: 92px; /* below fixed navbar */
+    }
+}
+
+/* PDF embed */
+.pdf-wrap {
+    margin-top: 18px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #eef2ff;
+}
+
+.pdf-iframe {
+    width: 100%;
+    height: 560px;
+    border: 0;
+    display: block;
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 40px 0;
+    color: #e5e7eb;
+    background: #111827;
+    margin-top: 40px;
+}
+
+/* small screens adjustments */
+@media (max-width: 991px) {
+    .content-card {
+        padding: 20px;
+    }
+
+    .meta-card {
+        margin-top: 18px;
+    }
+
+    .pdf-iframe {
+        height: 420px;
+    }
+
+    :root {
+        --label-width: 110px;
+    }
+
+    /* keep label width consistent */
+}
+
+/* subtle hover */
+a:hover {
+    text-decoration: none;
+}
+

@@ -1,0 +1,97 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f9fafb;
+    color: #1f2937;
+    overflow-x: hidden;
+    padding-top: 72px; /* so navbar doesn’t overlap */
+}
+
+/* Navbar */
+nav {
+    background-color: #ffffff;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    color: #2563eb !important;
+    letter-spacing: -0.3px;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 100px 20px 80px;
+    background: linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);
+}
+
+.hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 16px;
+}
+
+.hero p {
+    color: #4b5563;
+    font-size: 1.05rem;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+/* Content Section */
+.about-section {
+    padding: 80px 0;
+}
+
+.about-section .col-lg-6 img {
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    height: auto;
+}
+
+.about-section h2 {
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin-bottom: 16px;
+}
+
+.about-section p {
+    color: #4b5563;
+    line-height: 1.7;
+    font-size: 1rem;
+    margin-bottom: 16px;
+}
+
+/* Mission Section */
+.mission {
+    background: #fff;
+    text-align: center;
+    padding: 80px 20px;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.mission h2 {
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.mission p {
+    color: #555;
+    max-width: 720px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+footer {
+    text-align: center;
+    padding: 50px 0 30px;
+    background: #111827;
+    color: #e5e7eb;
+    font-size: .95rem;
+}
+
+
+

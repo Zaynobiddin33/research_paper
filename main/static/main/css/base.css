@@ -1,0 +1,102 @@
+.navbar .dropdown-toggle img {
+    transition: transform 0.2s ease;
+}
+
+.navbar .dropdown-toggle:hover img {
+    transform: scale(1.05);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f9fafb;
+    color: #1f2937;
+    overflow-x: hidden;
+}
+
+/* Navbar */
+nav {
+    background-color: #ffffff;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    color: #2563eb !important;
+    letter-spacing: -0.3px;
+}
+
+/* Hero */
+.hero {
+    text-align: center;
+    padding: 120px 20px;
+    background: linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);
+}
+
+.hero h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #111827;
+}
+
+.hero p {
+    color: #4b5563;
+    font-size: 1.05rem;
+    max-width: 680px;
+    margin: 0 auto 28px;
+}
+
+/* Input-group tweaks to make pills */
+.input-group .form-control {
+    border-radius: 999px 0 0 999px;
+    padding: 14px 18px;
+    border-right: none;
+}
+
+.input-group .btn {
+    border-radius: 0 999px 999px 0;
+    padding: 12px 20px;
+    font-weight: 600;
+    border-left: none;
+}
+
+/* Make input-group-lg proportions match */
+.input-group-lg > .form-control,
+.input-group-lg > .btn {
+    padding: 14px 18px;
+    font-size: 1rem;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    transition: transform .25s ease;
+    height: 100%;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+}
+
+footer {
+    text-align: center;
+    padding: 50px 0 30px;
+    background: #111827;
+    color: #e5e7eb;
+    font-size: .95rem;
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 80px 16px;
+    }
+}
+
+/* Ensure fixed-top navbar doesn't cover hero on small viewports */
+body {
+    padding-top: 72px;
+}
+
+

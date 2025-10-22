@@ -160,7 +160,7 @@ JAZZMIN_SETTINGS = {
 }
 
 JAZZMIN_UI_TWEAKS = {
-    "theme": "lux",   #slate, solar, spacelab, superhero, united, yeti
+    "theme": "lux",
     "navbar": "navbar-dark bg-primary",
     "sidebar": "sidebar-dark-primary",
     "brand_colour": "navbar-primary",
