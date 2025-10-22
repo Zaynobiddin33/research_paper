@@ -1,22 +1,38 @@
-from django.urls import path
-from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import path
+
+from .views import (
+    MainView,
+    AboutView,
+    CreatorsView,
+    RegisterView,
+    LoginView,
+    LogoutView,
+    UploadPaperView,
+    MyPapersView,
+    MyPaperDetailView,
+    PaperDetailView,
+    PaperDeleteView,
+)
 
 urlpatterns = [
-    path('', views.main, name='main'),
-    path('about/', views.about, name='about'),
-    path('creators/', views.creators, name='creators'),
-    path('register/', views.register, name='register'),
-    path('login/', views.login_view, name='login'),
-    path('logout/', views.logout_view, name='logout'),
-    path('check-username/', views.check_username, name='check_username'),
-    path('upoad-file/', views.upload_paper, name='upload_paper'),
-    path('my-papers/', views.my_papers, name='my_papers'),
-    path('my-paper/<int:id>', views.my_paper, name='my_paper'),
-    path('delete-paper/<int:id>', views.delete_paper, name='delete_paper'),
-    path('detail-paper/<int:id>', views.detail_paper, name='detail_paper'),
-    path('apply-otp/<int:id>', views.apply_otp, name = 'apply_otp'),
+    path('', MainView.as_view(), name='main'),
+    path('about/', AboutView.as_view(), name='about'),
+    path('creators/', CreatorsView.as_view(), name='creators'),
+
+    # Auth
+    path('register/', RegisterView.as_view(), name='register'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+
+    # Papers
+    path('upload-paper/', UploadPaperView.as_view(), name='upload_paper'),
+    path('my-papers/', MyPapersView.as_view(), name='my_papers'),
+    path('my-paper/<int:pk>/', MyPaperDetailView.as_view(), name='my_paper'),
+    path('detail-paper/<int:id>/', PaperDetailView.as_view(), name='detail_paper'),
+    path('delete-paper/<int:id>/', PaperDeleteView.as_view(), name='delete_paper'),
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
