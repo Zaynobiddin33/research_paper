@@ -1,20 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-
-from .views import (
-    MainView,
-    AboutView,
-    CreatorsView,
-    RegisterView,
-    LoginView,
-    LogoutView,
-    UploadPaperView,
-    MyPapersView,
-    MyPaperDetailView,
-    PaperDetailView,
-    PaperDeleteView,
-)
+from .views import *
 
 urlpatterns = [
     path('', MainView.as_view(), name='main'),
@@ -32,6 +19,14 @@ urlpatterns = [
     path('my-paper/<int:pk>/', MyPaperDetailView.as_view(), name='my_paper'),
     path('detail-paper/<int:id>/', PaperDetailView.as_view(), name='detail_paper'),
     path('delete-paper/<int:id>/', PaperDeleteView.as_view(), name='delete_paper'),
+    path('apply-otp/<int:id>', apply_otp, name = 'apply_otp'),
+
+    path('check-username/', check_username, name='check_username'),
+    path('admin-waitlist/', admin_waitlist, name='admin_waitlist'),
+    path('admin-detail/<int:id>', admin_paper_detail, name='admin_paper_detail'),
+
+    path('paper-accept/<int:id>', accept_paper, name='accept_paper'),
+    path('deny_paper/<int:id>', deny_paper, name='deny_paper'),
 ]
 
 if settings.DEBUG:

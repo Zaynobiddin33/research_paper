@@ -3,6 +3,7 @@
 
 {% block style %}
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'main/css/papers.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -51,9 +52,6 @@
             </form>
         </div>
     </section>
-
-    <input type="file" id="avatarInput" accept="image/*">
-    <img id="avatarPreview" src="{% static 'main/img/default_avatar.png' %}" alt="Avatar Preview" width="100">
 
     <!-- JS include -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

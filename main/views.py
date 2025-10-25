@@ -1,12 +1,18 @@
 from PyPDF2 import PdfReader
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
 from django.views.generic import ListView, TemplateView, DetailView
 from . import models
 from .models import Paper, CustomUser, Category, Creator
+from django.http import JsonResponse
+from django.db.models import Q
+from django.db.models.functions import Concat
+from django.db.models import F, Value
+from django.utils import timezone
 
 
 class RegisterView(View):
@@ -62,13 +68,37 @@ class LogoutView(LoginRequiredMixin, View):
         return redirect('main')
 
 
+
 class MainView(ListView):
     model = Paper
     template_name = 'index.html'
     context_object_name = 'papers'
+    extra_context = {'page_title': "So‘nggi maqolalar"}
 
     def get_queryset(self):
-        return Paper.objects.filter(status=4)
+        queryset = Paper.objects.filter(status=4)
+        query = self.request.GET.get("q")
+
+        if query:
+            queryset = queryset.annotate(
+                full_name=Concat(F('owner__first_name'), Value(' '), F('owner__last_name'))
+            ).filter(
+                Q(title__icontains=query) |
+                Q(summary__icontains=query) |
+                Q(intro__icontains=query) |
+                Q(organization__icontains=query) |
+                Q(keywords__icontains=query) |
+                Q(full_name__icontains=query)
+            )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.GET.get("q"):
+            context["page_title"] = "Qidiruv natijalari"
+        else:
+            context["page_title"] = "So‘nggi maqolalar"
+        return context
 
 
 class AboutView(TemplateView):
@@ -150,3 +180,77 @@ class PaperDeleteView(LoginRequiredMixin, View):
         paper = get_object_or_404(models.Paper, id=id, owner=request.user)
         paper.delete()
         return redirect('my_papers')
+
+@login_required(redirect_field_name='login')
+def apply_otp(request, id):
+    paper = models.Paper.objects.get(id = id)
+    if request.method == "POST":
+        otp = request.POST['otp']
+        otp_obj = models.OTP.objects.filter(code = int(otp))
+        if otp_obj.exists():
+            otp_obj = otp_obj.first()
+            otp_obj.paper = paper
+            otp_obj.paid_at = timezone.now()
+            otp_obj.save()
+            return redirect('my_papers')
+        messages.error(request, "Noto'g'ri OTP")
+    return render(request, 'otp.html')
+
+
+def check_username(request):
+    username = request.GET.get('username', None)
+    if username:
+        exists = CustomUser.objects.filter(username=username).exists()
+        return JsonResponse({'exists': exists})
+    return JsonResponse({'error': 'No username provided'}, status=400)
+
+@login_required(redirect_field_name='login')
+def admin_waitlist(request):
+    context = {}
+    if request.user.is_superuser:
+        papers = models.Paper.objects.filter(status = 2).order_by('paid_at')
+        context = {
+            'papers':papers
+        }
+    else:
+        return redirect('main')
+    return render(request, 'admin-waitlist.html', context)
+
+@login_required(redirect_field_name='login')
+def admin_paper_detail(request, id):
+    context = {}
+    if request.user.is_superuser:
+        paper = models.Paper.objects.get(id = id)
+        context = {
+            'paper':paper
+        }
+    else:
+        return redirect('main')
+    return render(request, 'detail-admin.html', context)
+
+
+@login_required(redirect_field_name='login')
+def accept_paper(request, id):
+    if request.user.is_superuser:
+        paper = models.Paper.objects.get(id = id)
+        paper.status = 4
+        paper.save()
+        return redirect('admin_waitlist')
+    else:
+        return redirect('main')
+
+@login_required(redirect_field_name='login')
+def deny_paper(request, id):
+    if request.user.is_superuser and request.method == 'POST':
+        paper = models.Paper.objects.get(id = id)
+        paper.status = 3
+        paper.save()
+        comment = request.POST['comment']
+        models.Comment.objects.create(
+            comment = comment,
+            paper = paper
+        )
+        return redirect('admin_waitlist')
+    else:
+        return redirect('main')
+    

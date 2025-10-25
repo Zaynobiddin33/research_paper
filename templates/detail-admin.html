@@ -57,15 +57,15 @@
 
                 <!-- Actions (download, cite) -->
                 <div class="d-flex flex-wrap gap-2 align-items-center mt-4">
-                    <a class="download-btn" href="{{ paper.file.url }}" download="{{ paper.title }}.pdf"
-                       aria-label="Download paper PDF">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                             style="flex-shrink:0" viewBox="0 0 16 16" aria-hidden="true">
-                            <path d="M.5 9.9a.5.5 0 0 1 .5-.5h3.5V1.5a.5.5 0 0 1 1 0v7.9h3.5a.5.5 0 0 1 .35.85l-4 4a.5.5 0 0 1-.7 0l-4-4A.5.5 0 0 1 .5 9.9z"/>
-                        </svg>
-                        PDF'ni yuklash
-                    </a>
-                    <button class="small-btn" data-bs-toggle="modal" data-bs-target="#citeModal">Sitata olish</button>
+
+                    <button class="small-btn" data-bs-toggle="modal" data-bs-target="#rejectModal">
+                    Rad etish
+                    </button>
+
+                    <!-- Accept Button -->
+                    <button class="download-btn" data-bs-toggle="modal" data-bs-target="#acceptModal">
+                    Qabul qilish
+                    </button>
                 </div>
             </article>
 
@@ -118,13 +118,13 @@
 
                     <!-- Actions row spans both columns -->
                     <div class="meta-actions">
-                        <a class="download-btn" href="{{ paper.file.url }}" download="{{ paper.title }}.pdf"
+                        <a class="download-btn" href="{{ paper.file.url }}" target="_blank"
                            aria-label="Download paper PDF (sidebar)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
                                  viewBox="0 0 16 16" aria-hidden="true">
                                 <path d="M.5 9.9a.5.5 0 0 1 .5-.5h3.5V1.5a.5.5 0 0 1 1 0v7.9h3.5a.5.5 0 0 1 .35.85l-4 4a.5.5 0 0 1-.7 0l-4-4A.5.5 0 0 1 .5 9.9z"/>
                             </svg>
-                            Yuklab olish
+                            PDFni o'qish
                         </a>
                     </div>
 
@@ -142,27 +142,46 @@
     <!-- Citation Modal -->
 
     <!-- Modal -->
-    <div class="modal fade" id="citeModal" tabindex="-1" aria-labelledby="citeModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="citeModalLabel">Sitata olish (Harvard texnikasi)</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="{%url 'deny_paper' paper.id %}">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" id="rejectModalLabel">Maqolani rad etish</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6>Kommentariya yozing. Nega maqolani rad qildingiz?</h6>
+          <textarea name="comment" class="form-control" rows="4" required></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Ortga</button>
+          <button type="submit" class="btn btn-primary rounded-pill">Yuborish</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
-                <div class="modal-body">
-        <textarea id="citationText" class="form-control" rows="4" readonly>
-{{ paper.owner.last_name }}, {{ paper.owner.first_name }}. ({{ paper.published_at.year }}). {{ paper.title }}.
-        </textarea>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Yopish</button>
-                    <button type="button" class="btn btn-primary rounded-pill" id="copyCitation">Nusxalash</button>
-                </div>
-            </div>
+<!-- ACCEPT MODAL -->
+<div class="modal fade" id="acceptModal" tabindex="-1" aria-labelledby="acceptModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="acceptModalLabel">Maqolani qabul qilish</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6>Bu maqolani tasdiqlganingizdan so'ng bu harakatni bekor qilib bo'lmaydi. Tasdiqlashga ishonchingiz komilmi?</h6>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Ortga</button>
+          <a href="{%url 'accept_paper' paper.id%}" class="btn btn-primary rounded-pill">Tasdiqlash</a>
         </div>
     </div>
+  </div>
+</div>
 
     <!-- Bootstrap JS (if not already included) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

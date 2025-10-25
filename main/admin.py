@@ -46,7 +46,7 @@ class PaperAdmin(admin.ModelAdmin):
             "fields": ("owner", "category")
         }),
         ("File & Status", {
-            "fields": ("file", "pages", "status", "published_at")
+            "fields": ("file", "pages", "status", "published_at", "paid_at")
         }),
     )
 

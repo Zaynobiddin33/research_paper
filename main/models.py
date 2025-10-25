@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User, AbstractUser
+
 from django.db import models
 
 
@@ -19,6 +20,10 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+    
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
 
 
 class Paper(models.Model):
@@ -34,6 +39,7 @@ class Paper(models.Model):
     keywords = models.TextField()
     pages = models.IntegerField()
     organization = models.CharField(max_length=250)
+    paid_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -50,7 +56,7 @@ class OTP(models.Model):
     def save(self, *args, **kwargs):
         if self.paper:
             paper = Paper.objects.get(id=self.paper.id)
-            paper.status += 1
+            paper.status = 2
             paper.save()
         return super().save(*args, **kwargs)
 
@@ -67,3 +73,7 @@ class Creator(models.Model):
 
     def __str__(self):
         return self.name
+
+class Comment(models.Model):
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
+    comment = models.TextField()

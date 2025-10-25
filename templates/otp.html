@@ -14,12 +14,19 @@
         <div class="container">
             <div class="otp-card">
                 <div class="text-center">
-                    <div class="otp-title">Enter Verification Code</div>
+                    <div class="otp-title">OTP kodni kiriting</div>
                     <div class="otp-desc">
-                        We sent a one-time 8-digit code to <strong id="userContact">your.email@example.com</strong>.
-                        Enter it below to verify your account.
+                      OTP kodini olish uchun Telegram’dagi admin <a href="https://t.me/izzatullayvich">@izzatullayvich</a> bilan bog‘laning. <strong>20 000 so‘m</strong> to‘lovni amalga oshirib, 
+                      chekni yuboring. To‘lovdan so‘ng sizga kod beriladi.
                     </div>
                 </div>
+                {% if messages %}
+                <div>
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} text-danger text-center py-2">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
 
                 <!-- OTP Form -->
                 <form id="otpForm" method="POST" action="" novalidate>
