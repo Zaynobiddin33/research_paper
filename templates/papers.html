@@ -36,10 +36,10 @@
                             <p style="min-height: 90px;">{{ paper.intro|truncatewords:20 }}</p>
                             <a href="{% url 'my_paper' paper.id %}" class="text-primary fw-semibold">Batafsil ko'rish
                                 →</a>
-                            {% if paper.status == 1 %}
-                                <a style="width: 100%;" href="{% url 'apply_otp' paper.id %}"
-                                   class="btn btn-sm btn-primary mt-3">Tekshirtirish →</a>
-                            {% endif %}
+{#                            {% if paper.status == 1 %}#}
+{#                                <a style="width: 100%;" href="{% url 'apply_otp' paper.id %}"#}
+{#                                   class="btn btn-sm btn-primary mt-3">Tekshirtirish →</a>#}
+{#                            {% endif %}#}
                         </div>
                     </div>
                 </div>

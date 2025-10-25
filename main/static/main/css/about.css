@@ -52,30 +52,6 @@ body {
     color: #4b5563;
 }
 
-/* MISSION SECTION */
-.mission {
-    position: relative;
-    background:
-            linear-gradient(to bottom, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.9)),
-            url('https://images.unsplash.com/photo-1535930749574-1399327ce78f?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
-    padding: 6rem 0;
-    color: #101213;
-}
-.mission .overlay {
-    display: none; /* disabled extra overlay */
-}
-.mission h2 {
-    font-size: 2.25rem;
-    font-weight: 700;
-    color: #15181a;
-    position: relative;
-}
-.mission p {
-    font-size: 1.3rem;
-    color: #030914;
-    position: relative;
-    line-height: 1.8;
-}
 
 /* CTA SECTION */
 .cta {
