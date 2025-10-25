@@ -1,97 +1,125 @@
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f9fafb;
+    background-color: #f8fafc;
     color: #1f2937;
     overflow-x: hidden;
-    padding-top: 72px; /* so navbar doesn’t overlap */
 }
 
-/* Navbar */
-nav {
-    background-color: #ffffff;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
-}
-
-.navbar-brand {
-    font-weight: 700;
-    color: #2563eb !important;
-    letter-spacing: -0.3px;
-}
-
-/* Hero Section */
+/* HERO SECTION */
 .hero {
-    text-align: center;
-    padding: 100px 20px 80px;
-    background: linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);
+    position: relative;
+    min-height: 60vh;
+    background: url('https://images.unsplash.com/photo-1509228622682-30f4f4d5a208?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.hero .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+}
+.hero h1 {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: #ffffff;
+}
+.hero .highlight {
+    color: #3b82f6;
+}
+.hero p {
+    font-size: 1.25rem;
+    color: #e5e7eb;
 }
 
-.hero h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
+/* ABOUT SECTION */
+.about-section {
+    padding: 5rem 0;
+}
+.about-section img {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+}
+.about-section h2 {
+    font-size: 2rem;
     font-weight: 700;
     color: #111827;
-    margin-bottom: 16px;
 }
-
-.hero p {
-    color: #4b5563;
-    font-size: 1.05rem;
-    max-width: 720px;
-    margin: 0 auto;
-}
-
-/* Content Section */
-.about-section {
-    padding: 80px 0;
-}
-
-.about-section .col-lg-6 img {
-    border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    width: 100%;
-    height: auto;
-}
-
-.about-section h2 {
-    font-weight: 700;
-    font-size: 1.8rem;
-    margin-bottom: 16px;
-}
-
 .about-section p {
+    font-size: 1.1rem;
+    line-height: 1.8;
     color: #4b5563;
-    line-height: 1.7;
-    font-size: 1rem;
-    margin-bottom: 16px;
 }
 
-/* Mission Section */
+/* MISSION SECTION */
 .mission {
-    background: #fff;
-    text-align: center;
-    padding: 80px 20px;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
+    position: relative;
+    background:
+            linear-gradient(to bottom, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.9)),
+            url('https://images.unsplash.com/photo-1535930749574-1399327ce78f?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+    padding: 6rem 0;
+    color: #101213;
 }
-
+.mission .overlay {
+    display: none; /* disabled extra overlay */
+}
 .mission h2 {
+    font-size: 2.25rem;
     font-weight: 700;
-    margin-bottom: 16px;
+    color: #15181a;
+    position: relative;
 }
-
 .mission p {
-    color: #555;
-    max-width: 720px;
-    margin: 0 auto;
-    line-height: 1.7;
+    font-size: 1.3rem;
+    color: #030914;
+    position: relative;
+    line-height: 1.8;
 }
 
-footer {
-    text-align: center;
-    padding: 50px 0 30px;
-    background: #111827;
-    color: #e5e7eb;
-    font-size: .95rem;
+/* CTA SECTION */
+.cta {
+    padding: 5rem 0;
+    background: #ffffff;
+}
+.cta h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+}
+.cta p {
+    font-size: 1.25rem;
+    color: #6b7280;
+}
+.cta .btn-primary {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+}
+.cta .btn-primary:hover {
+    background-color: #2563eb;
+    border-color: #2563eb;
 }
 
-
-
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .hero {
+        min-height: 50vh;
+    }
+    .hero h1 {
+        font-size: clamp(1.75rem, 4vw, 2.5rem);
+    }
+    .hero p {
+        font-size: 1rem;
+    }
+    .about-section,
+    .mission,
+    .cta {
+        padding: 3rem 0;
+    }
+    .about-section img {
+        margin-bottom: 1.5rem;
+    }
+}

@@ -100,3 +100,21 @@ body {
 }
 
 
+.hero h1, .hero p {
+    text-shadow: 0 3px 10px rgba(0,0,0,0.6);
+}
+
+.paper-card {
+    transition: all 0.3s ease;
+    border-radius: 1rem;
+}
+
+.paper-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.join-us-section {
+    background-attachment: fixed;
+    background-size: cover;
+}

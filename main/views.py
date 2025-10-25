@@ -2,11 +2,15 @@ from PyPDF2 import PdfReader
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
-from django.views.generic import ListView, TemplateView, DetailView
+from django.views.generic import ListView
+from django.views.generic import TemplateView, DetailView
+
 from . import models
-from .models import Paper, CustomUser, Category, Creator
+from .models import CustomUser, Creator
+from .models import Paper, Category
 
 
 class RegisterView(View):
@@ -68,7 +72,8 @@ class MainView(ListView):
     context_object_name = 'papers'
 
     def get_queryset(self):
-        return Paper.objects.filter(status=4)
+        number = 6
+        return Paper.objects.filter(status=4).order_by('-published_at')[:number]
 
 
 class AboutView(TemplateView):
@@ -150,3 +155,34 @@ class PaperDeleteView(LoginRequiredMixin, View):
         paper = get_object_or_404(models.Paper, id=id, owner=request.user)
         paper.delete()
         return redirect('my_papers')
+
+
+class AllPapersView(ListView):
+    model = Paper
+    template_name = 'all_papers.html'
+    context_object_name = 'papers'
+    paginate_by = 9
+
+    def get_queryset(self):
+        queryset = Paper.objects.filter(status=4).order_by('-published_at')
+
+        query = self.request.GET.get('q')
+        category_id = self.request.GET.get('category')
+
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query) |
+                Q(summary__icontains=query) |
+                Q(owner__first_name__icontains=query) |
+                Q(keywords__icontains=query)
+            )
+
+        if category_id:
+            queryset = queryset.filter(category__id=category_id)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
