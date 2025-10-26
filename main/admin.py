@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Category, CustomUser, Paper, OTP, Creator
+from .models import Category, CustomUser, Paper, Creator
 
 
 # --- Custom User Admin ---
@@ -51,13 +51,6 @@ class PaperAdmin(admin.ModelAdmin):
     )
 
 
-# --- OTP Admin ---
-@admin.register(OTP)
-class OTPAdmin(admin.ModelAdmin):
-    list_display = ("id", "code", "paper")
-    search_fields = ("code", "paper__title")
-    list_filter = ("paper__status",)
-    ordering = ("-id",)
 
 
 # --- Creator Admin ---

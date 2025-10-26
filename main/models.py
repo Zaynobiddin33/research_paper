@@ -92,21 +92,6 @@ class Paper(models.Model):
     def __str__(self):
         return self.title
 
-class OTP(models.Model):
-    code = models.IntegerField(unique=True)
-    paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=True, blank=True)
-
-    class Meta:
-        verbose_name_plural = "OTPs"
-
-
-    def save(self, *args, **kwargs):
-        if self.paper:
-            paper = Paper.objects.get(id=self.paper.id)
-            paper.status += 1
-            paper.save()
-        return super().save(*args, **kwargs)
-
 
 class Creator(models.Model):
     name = models.CharField(max_length=255)

@@ -72,7 +72,7 @@ class LogoutView(LoginRequiredMixin, View):
 
 class MainView(ListView):
     model = Paper
-    template_name = 'index.html'
+    template_name = 'templates/main-page.html'
     context_object_name = 'papers'
 
     def get_queryset(self):
@@ -86,7 +86,7 @@ class AboutView(TemplateView):
 
 class CreatorsView(ListView):
     model = Creator
-    template_name = 'owners.html'
+    template_name = 'templates/creators.html'
     context_object_name = 'creators'
 
     def get_queryset(self):
@@ -163,7 +163,7 @@ class PaperDeleteView(LoginRequiredMixin, View):
 
 class AllPapersView(ListView):
     model = Paper
-    template_name = 'all_papers.html'
+    template_name = 'templates/all-papers.html'
     context_object_name = 'papers'
     paginate_by = 9
 
