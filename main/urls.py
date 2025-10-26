@@ -21,6 +21,10 @@ urlpatterns = [
     path('my-paper/<int:pk>/', MyPaperDetailView.as_view(), name='my_paper'),
     path('detail-paper/<int:id>/', PaperDetailView.as_view(), name='detail_paper'),
     path('delete-paper/<int:id>/', PaperDeleteView.as_view(), name='delete_paper'),
+
+    path('profile/', ProfileStatsView.as_view(), name='profile'),
+    path('settings/profile/', ProfileUpdateView.as_view(), name='update_profile'),
+    path('settings/password/', PasswordChangeView.as_view(), name='change_password'),
 ]
 
 if settings.DEBUG:

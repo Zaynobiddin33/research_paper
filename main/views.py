@@ -1,14 +1,18 @@
 from PyPDF2 import PdfReader
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic import TemplateView, DetailView
 
 from . import models
+from .forms import CustomPasswordChangeForm
 from .models import CustomUser, Creator
 from .models import Paper, Category
 
@@ -186,3 +190,59 @@ class AllPapersView(ListView):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
         return context
+
+
+class ProfileStatsView(LoginRequiredMixin, View):
+    login_url = 'login'
+    template_name = 'profile.html'
+
+    def get(self, request):
+        user = request.user
+
+        # Count papers by status
+        draft_count = Paper.objects.filter(owner=user, status=1).count()
+        on_process_count = Paper.objects.filter(owner=user, status=2).count()
+        declined_count = Paper.objects.filter(owner=user, status=3).count()
+        accepted_count = Paper.objects.filter(owner=user, status=4).count()
+
+        context = {
+            'draft_count': draft_count,
+            'on_process_count': on_process_count,
+            'declined_count': declined_count,
+            'accepted_count': accepted_count,
+        }
+
+        return render(request, self.template_name, context)
+
+
+class ProfileUpdateView(LoginRequiredMixin, View):
+    template_name = 'settings.html'
+
+    def get(self, request):
+        # Just render the page with user info
+        return render(request, self.template_name)
+
+    def post(self, request):
+        user = request.user
+        user.first_name = request.POST.get('first_name', user.first_name)
+        user.last_name = request.POST.get('last_name', user.last_name)
+        user.username = request.POST.get('username', user.username)
+        user.save()
+        return redirect('update_profile')
+
+
+class PasswordChangeView(LoginRequiredMixin, View):
+    template_name = 'settings.html'
+
+    def get(self, request):
+        form = CustomPasswordChangeForm(user=request.user)
+        return render(request, self.template_name, {'password_form': form})
+
+    def post(self, request):
+        form = CustomPasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "Parol muvaffaqiyatli o`zgartirildi")# Keep user logged in
+            return redirect('change_password')
+        return render(request, self.template_name, {'password_form': form})
