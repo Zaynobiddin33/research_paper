@@ -1,0 +1,52 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8fafc;
+    color: #1f2937;
+}
+
+.profile-stats h2 {
+    font-weight: 700;
+    font-size: 2rem;
+    color: #111827;
+}
+
+.stat-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.stat-card p {
+    font-size: 1rem;
+    color: #4b5563;
+}
+
+.stat-card.accepted {
+    border-top: 4px solid #16a34a; /* green */
+}
+
+.stat-card.declined {
+    border-top: 4px solid #dc2626; /* red */
+}
+
+.stat-card.on-process {
+    border-top: 4px solid #f59e0b; /* amber */
+}
+
+.stat-card.draft {
+    border-top: 4px solid #3b82f6; /* blue */
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}

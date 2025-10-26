@@ -13,9 +13,11 @@
     >
         <div class="overlay"></div>
         <div class="container position-relative z-1">
-            <h1 class="fw-bold mb-3">Tadqiqot maqolalarini o‘rganing</h1>
-            <p class="lead mb-4">Eng so‘nggi ilmiy ishlarga nazar tashlang, o‘qing va bilim doirangizni kengaytiring.</p>
+            <h1 class="fw-bold mb-3 text-white">Tadqiqot maqolalarini o‘rganing</h1>
+            <p class="lead mb-4 text-white">Eng so‘nggi ilmiy ishlarga nazar tashlang, o‘qing va bilim doirangizni
+                kengaytiring.</p>
         </div>
+
     </section>
 
     <!-- Filter Form -->
@@ -66,7 +68,8 @@
                                 {{ paper.owner.first_name }} · {{ paper.published_at|date:"Y" }}
                             </p>
                             <p>{{ paper.summary|truncatewords:25 }}</p>
-                            <a href="{% url 'detail_paper' paper.id %}" class="text-primary fw-semibold text-decoration-none">
+                            <a href="{% url 'detail_paper' paper.id %}"
+                               class="text-primary fw-semibold text-decoration-none">
                                 Ko‘rish →
                             </a>
                         </div>

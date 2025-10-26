@@ -64,8 +64,8 @@
                             <span class="ms-2 fw-semibold">{{ user.first_name }}</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                            <li><a class="dropdown-item" href="#">Profil</a></li>
-                            <li><a class="dropdown-item" href="#">Sozlamalar</a></li>
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">Profil</a></li>
+                            <li><a class="dropdown-item" href="{% url 'update_profile' %}">Sozlamalar</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
@@ -74,7 +74,7 @@
                     </li>
                 {% else %}
                     <li class="nav-item"><a href="{% url 'login' %}"
-                                            class="btn btn-primary btn-sm ms-lg-3 p-2 m-1 text-white">Login</a></li>
+                                            class="btn btn-primary btn-sm ms-lg-3 p-2 m-1 text-white">Kirish</a></li>
                     <li class="nav-item"><a href="{% url 'register' %}"
                                             class="btn btn-primary btn-sm ms-lg-3 p-2 m-1 text-white">Ro'yxatdan
                         o'tish</a></li>

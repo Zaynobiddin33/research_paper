@@ -1,15 +1,19 @@
 from PyPDF2 import PdfReader
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic import TemplateView, DetailView
 
 from . import models
+from .forms import CustomPasswordChangeForm
 from .models import Paper, CustomUser, Category, Creator
 from django.http import JsonResponse
 from django.db.models import Q
@@ -74,7 +78,7 @@ class LogoutView(LoginRequiredMixin, View):
 
 class MainView(ListView):
     model = Paper
-    template_name = 'index.html'
+    template_name = 'templates/main-page.html'
     context_object_name = 'papers'
     extra_context = {'page_title': "So‘nggi maqolalar"}
 
@@ -89,7 +93,7 @@ class AboutView(TemplateView):
 
 class CreatorsView(ListView):
     model = Creator
-    template_name = 'owners.html'
+    template_name = 'templates/creators.html'
     context_object_name = 'creators'
 
     def get_queryset(self):
@@ -149,7 +153,6 @@ class UploadPaperView(LoginRequiredMixin, View):
             title=data['title'],
             summary=data['summary'],
             intro=data['intro'],
-            citations=data['citations'],
             file=file,
             category=category,
             keywords=data['keywords'],
@@ -170,7 +173,7 @@ class PaperDeleteView(LoginRequiredMixin, View):
 
 class AllPapersView(ListView):
     model = Paper
-    template_name = 'all_papers.html'
+    template_name = 'templates/all-papers.html'
     context_object_name = 'papers'
     paginate_by = 9
 
@@ -198,6 +201,62 @@ class AllPapersView(ListView):
         context['categories'] = Category.objects.all()
         return context
 
+
+class ProfileStatsView(LoginRequiredMixin, View):
+    login_url = 'login'
+    template_name = 'profile.html'
+
+    def get(self, request):
+        user = request.user
+
+        # Count papers by status
+        draft_count = Paper.objects.filter(owner=user, status=1).count()
+        on_process_count = Paper.objects.filter(owner=user, status=2).count()
+        declined_count = Paper.objects.filter(owner=user, status=3).count()
+        accepted_count = Paper.objects.filter(owner=user, status=4).count()
+
+        context = {
+            'draft_count': draft_count,
+            'on_process_count': on_process_count,
+            'declined_count': declined_count,
+            'accepted_count': accepted_count,
+        }
+
+        return render(request, self.template_name, context)
+
+
+class ProfileUpdateView(LoginRequiredMixin, View):
+    template_name = 'settings.html'
+
+    def get(self, request):
+        # Just render the page with user info
+        return render(request, self.template_name)
+
+    def post(self, request):
+        user = request.user
+        user.first_name = request.POST.get('first_name', user.first_name)
+        user.last_name = request.POST.get('last_name', user.last_name)
+        user.username = request.POST.get('username', user.username)
+        user.save()
+        return redirect('update_profile')
+
+
+class PasswordChangeView(LoginRequiredMixin, View):
+    template_name = 'settings.html'
+
+    def get(self, request):
+        form = CustomPasswordChangeForm(user=request.user)
+        return render(request, self.template_name, {'password_form': form})
+
+    def post(self, request):
+        form = CustomPasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, "Parol muvaffaqiyatli o`zgartirildi")# Keep user logged in
+            return redirect('change_password')
+        return render(request, self.template_name, {'password_form': form})
+
 @login_required(redirect_field_name='login')
 def apply_otp(request, id):
     paper = models.Paper.objects.get(id = id)
@@ -220,17 +279,17 @@ def check_username(request):
         return JsonResponse({'exists': exists})
     return JsonResponse({'error': 'No username provided'}, status=400)
 
-@login_required(redirect_field_name='login')
+@login_required(login_url='login')
 def admin_waitlist(request):
-    context = {}
-    if request.user.is_superuser:
-        papers = models.Paper.objects.filter(status = 2).order_by('paid_at')
-        context = {
-            'papers':papers
-        }
-    else:
+    if not request.user.is_superuser:
         return redirect('main')
-    return render(request, 'admin-waitlist.html', context)
+
+    papers = models.Paper.objects.filter(
+        payment__status=2,
+        status=2
+    ).distinct()
+
+    return render(request, 'admin-waitlist.html', {'papers': papers})
 
 @login_required(redirect_field_name='login')
 def admin_paper_detail(request, id):
@@ -353,7 +412,6 @@ def edit_paper(request, id):
             paper.title = data['title']
             paper.summary = data['summary']
             paper.intro = data['intro']
-            paper.citations = data['citations']
             paper.category = category
             paper.keywords = data['keywords']
             paper.status = 1

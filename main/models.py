@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, AbstractUser
-from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator
+from django.core.validators import MinLengthValidator
 from django.db import models
 
 
@@ -36,24 +36,21 @@ class Paper(models.Model):
     category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)
 
     title = models.CharField(
-        max_length=255,
-        validators=[MinLengthValidator(10)],
+        max_length=100,
+        validators=[MinLengthValidator(1)],
         help_text="Sarlavha 10–255 belgidan iborat bo‘lishi kerak."
     )
 
     summary = models.TextField(
+        max_length=500,
         validators=[MinLengthValidator(100)],
         help_text="Qisqacha mazmun kamida 100 ta belgidan iborat bo‘lishi kerak."
     )
 
     intro = models.TextField(
-        validators=[MinLengthValidator(300)],
-        help_text="Kirish qismi kamida 300 ta belgidan iborat bo‘lishi kerak."
-    )
-
-    citations = models.TextField(
-        validators=[MinLengthValidator(50)],
-        help_text="Iqtiboslar ro‘yxati kamida 50 ta belgidan iborat bo‘lishi kerak."
+        max_length=500,
+        validators=[MinLengthValidator(100)],
+        help_text="Kirish qismi kamida 100 ta belgidan iborat bo‘lishi kerak."
     )
 
     file = models.FileField(upload_to='pdfs/')
@@ -67,13 +64,12 @@ class Paper(models.Model):
     published_at = models.DateField(auto_now=True)
 
     keywords = models.CharField(
-        max_length=300,
+        max_length=100,
         validators=[MinLengthValidator(10)],
         help_text="Kalit so‘zlar 10–300 belgidan iborat bo‘lishi kerak."
     )
 
     pages = models.IntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(50)],
         null=True,
         blank=True,
         help_text="Betlar soni 3–50 oralig‘ida bo‘lishi kerak."
@@ -81,7 +77,7 @@ class Paper(models.Model):
 
     organization = models.CharField(
         max_length=120,
-        validators=[MinLengthValidator(5)],
+        validators=[MinLengthValidator(1)],
         null=True,
         blank=True,
         help_text="Tashkilot nomi 5–120 belgidan iborat bo‘lishi kerak."
@@ -97,21 +93,6 @@ class Paper(models.Model):
 
     def __str__(self):
         return self.title
-
-class OTP(models.Model):
-    code = models.IntegerField(unique=True)
-    paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=True, blank=True)
-
-    class Meta:
-        verbose_name_plural = "OTPs"
-
-
-    def save(self, *args, **kwargs):
-        if self.paper:
-            paper = Paper.objects.get(id=self.paper.id)
-            paper.status = 2
-            paper.save()
-        return super().save(*args, **kwargs)
 
 
 class Creator(models.Model):
