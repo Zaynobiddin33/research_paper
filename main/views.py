@@ -3,9 +3,12 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
-from django.views.generic import ListView, TemplateView, DetailView
+from django.views.generic import ListView
+from django.views.generic import TemplateView, DetailView
+
 from . import models
 from .models import Paper, CustomUser, Category, Creator
 from django.http import JsonResponse
@@ -76,29 +79,8 @@ class MainView(ListView):
     extra_context = {'page_title': "So‘nggi maqolalar"}
 
     def get_queryset(self):
-        queryset = Paper.objects.filter(status=4)
-        query = self.request.GET.get("q")
-
-        if query:
-            queryset = queryset.annotate(
-                full_name=Concat(F('owner__first_name'), Value(' '), F('owner__last_name'))
-            ).filter(
-                Q(title__icontains=query) |
-                Q(summary__icontains=query) |
-                Q(intro__icontains=query) |
-                Q(organization__icontains=query) |
-                Q(keywords__icontains=query) |
-                Q(full_name__icontains=query)
-            )
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.GET.get("q"):
-            context["page_title"] = "Qidiruv natijalari"
-        else:
-            context["page_title"] = "So‘nggi maqolalar"
-        return context
+        number = 6
+        return Paper.objects.filter(status=4).order_by('-published_at')[:number]
 
 
 class AboutView(TemplateView):
@@ -139,7 +121,11 @@ class MyPaperDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['keywords'] = self.object.keywords.split(',')
+        paper = self.object
+        context['keywords'] = paper.keywords.split(',')
+
+        context['comments'] = models.Comment.objects.filter(paper=paper).order_by('-id')
+
         return context
 
 
@@ -181,19 +167,49 @@ class PaperDeleteView(LoginRequiredMixin, View):
         paper.delete()
         return redirect('my_papers')
 
+
+class AllPapersView(ListView):
+    model = Paper
+    template_name = 'all_papers.html'
+    context_object_name = 'papers'
+    paginate_by = 9
+
+    def get_queryset(self):
+        queryset = Paper.objects.filter(status=4).order_by('-published_at')
+
+        query = self.request.GET.get('q')
+        category_id = self.request.GET.get('category')
+
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query) |
+                Q(summary__icontains=query) |
+                Q(owner__first_name__icontains=query) |
+                Q(keywords__icontains=query)
+            )
+
+        if category_id:
+            queryset = queryset.filter(category__id=category_id)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
+
 @login_required(redirect_field_name='login')
 def apply_otp(request, id):
     paper = models.Paper.objects.get(id = id)
     if request.method == "POST":
-        otp = request.POST['otp']
-        otp_obj = models.OTP.objects.filter(code = int(otp))
-        if otp_obj.exists():
-            otp_obj = otp_obj.first()
-            otp_obj.paper = paper
-            otp_obj.paid_at = timezone.now()
-            otp_obj.save()
-            return redirect('my_papers')
-        messages.error(request, "Noto'g'ri OTP")
+        image = request.FILES['check']
+        models.Payment.objects.create(
+            paper = paper,
+            check_image = image
+        )
+        paper.status = 5
+        paper.save()
+        return redirect('success_payment')
     return render(request, 'otp.html')
 
 
@@ -244,6 +260,7 @@ def deny_paper(request, id):
     if request.user.is_superuser and request.method == 'POST':
         paper = models.Paper.objects.get(id = id)
         paper.status = 3
+        paper.reject_count+=1
         paper.save()
         comment = request.POST['comment']
         models.Comment.objects.create(
@@ -253,4 +270,104 @@ def deny_paper(request, id):
         return redirect('admin_waitlist')
     else:
         return redirect('main')
+
+@login_required(redirect_field_name='login')
+def success_payment(request):
+    return render(request, 'success-payment.html')
+
+@login_required(redirect_field_name='login')
+def payments(request):
+    context = {}
+    if request.user.is_superuser:
+        payments = models.Payment.objects.filter(status = 1).order_by('id')
+        context = {
+            'payments': payments
+        }
+    else:
+        return redirect('main')
+    return render(request, 'payments-admin.html', context)
+
+@login_required(redirect_field_name='login')
+def accept_payment(request, id):
+    if request.user.is_superuser:
+        check = models.Payment.objects.get(id = id)
+        check.status = 2
+        paper = check.paper
+        paper.status = 2
+        paper.save()
+        check.save()
+        return redirect('payments')
+    else:
+        return redirect('main')
     
+
+@login_required(redirect_field_name='login')
+def deny_payment(request, id):
+    if request.user.is_superuser:
+        check = models.Payment.objects.get(id = id)
+        check.status = 3
+        paper = check.paper
+        paper.status = 1
+        paper.save()
+        check.save()
+        return redirect('payments')
+    else:
+        return redirect('main')
+    
+
+@login_required(redirect_field_name='login')
+def payments_stats(request):
+    if request.user.is_superuser:
+        now = timezone.now()
+        total_payments = models.Payment.objects.filter(status = 2).count()
+        total_sum = total_payments*20000
+        monthly_payments = models.Payment.objects.filter(paid_at__year = now.year, paid_at__month = now.month, status = 2).count()
+        monthly_sum = monthly_payments*20000
+        payments = models.Payment.objects.filter(status = 2).order_by('-paid_at')
+
+        context = {
+            'total':total_payments,
+            'total_sum':total_sum,
+            'monthly':monthly_payments,
+            'monthly_sum':monthly_sum,
+            'payments':payments
+        }
+    else:
+        return redirect('main')
+    return render(request, 'payment-stats.html', context)
+
+@login_required(redirect_field_name='login')
+def edit_paper(request, id):
+    paper = models.Paper.objects.filter(owner = request.user, id = id).first()
+    categories = models.Category.objects.all()
+    if paper.status ==1:
+        if request.method == 'POST':
+            data = request.POST
+            file = request.FILES['file']
+            category = Category.objects.get(name=data['category'])
+            if file:
+                pdf = PdfReader(file)
+                paper.file = file
+                paper.pages = len(pdf.pages)
+
+            paper.title = data['title']
+            paper.summary = data['summary']
+            paper.intro = data['intro']
+            paper.citations = data['citations']
+            paper.category = category
+            paper.keywords = data['keywords']
+            paper.status = 1
+
+            paper.save()
+            return redirect('my_paper', paper.id)
+    else:
+        return redirect('main')
+    return render(request, 'edit-paper.html', {'paper': paper, 'categories': categories})
+
+@login_required(redirect_field_name='login')
+def resubmit_paper(request, id):
+    paper = models.Paper.objects.get(id = id)
+    if paper.reject_count<5:
+        paper.status = 2
+        paper.save()
+    return redirect('my_paper', paper.id)

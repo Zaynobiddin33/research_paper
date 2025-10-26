@@ -29,6 +29,8 @@
 
         <div class="collapse navbar-collapse" id="navmenu">
             <ul class="navbar-nav ms-auto align-items-lg-center">
+                <li class="nav-item"><a href="{% url 'all_papers' %}" class="nav-link px-3">Maqolalar</a></li>
+
                 <li class="nav-item"><a href="{% url 'creators' %}" class="nav-link px-3">Yaratuvchilar</a></li>
                 <!-- <li class="nav-item"><a href="#" class="nav-link px-3">Authors</a></li> -->
                 <li class="nav-item"><a href="{% url 'about' %}" class="nav-link px-3">Biz haqimizda</a></li>
@@ -39,9 +41,16 @@
                     <li class="nav-item"><a href="{% url 'upload_paper' %}"
                                             class="m-lg-2 mb-2 px-3 btn btn-outline-primary rounded-pill">Maqola
                         yuklash</a></li>
+
                     <li class="nav-item"><a href="{% url 'my_papers' %}"
-                                            class="px-3 btn btn-outline-primary rounded-pill">Mening maqolalarim</a>
+                                            class="px-3 m-lg-2 mb-2  btn btn-outline-primary rounded-pill">Mening maqolalarim</a>
                     </li>
+
+                    {%if user.is_superuser%}
+                    <li class="nav-item"><a href="{% url 'payments' %}"
+                                            class="px-3 btn btn-outline-primary rounded-pill">To'lovlar</a>
+                    </li>
+                    {%endif%}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="profileDropdown"
                            role="button" data-bs-toggle="dropdown" aria-expanded="false">

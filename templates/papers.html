@@ -22,13 +22,15 @@
                     <div class="card p-4 flex-fill">
                         <div class="card-body">
                             {% if paper.status == 1 %}
-                                <span class="status-badge status-draft">Tekshirilmagan</span>
+                                <span class="status-badge status-draft">To'lanmagan</span>
                             {% elif paper.status == 2 %}
                                 <span class="status-badge status-review">Tekshiruv jarayonida</span>
                             {% elif paper.status == 3 %}
                                 <span class="status-badge status-decline">Rad etilgan</span>
                             {% elif paper.status == 4 %}
                                 <span class="status-badge status-published">Nashr etilgan</span>
+                            {% elif paper.status == 5 %}
+                                <span class="status-badge status-review">To'lov tekshirilmoqda</span>
                             {% endif %}
 
                             <h5 class="card-title mt-2" style="min-height: 50px;">{{ paper.title|truncatewords:6 }}</h5>
@@ -39,7 +41,7 @@
                             {% if paper.status == 1 %}
                                 <a style="width: 100%;" href="{% url 'apply_otp' paper.id %}"
                                    class="btn btn-sm btn-primary mt-3">Tekshirtirish →</a>
-                            {% endif %}
+                           {% endif %}
                         </div>
                     </div>
                 </div>

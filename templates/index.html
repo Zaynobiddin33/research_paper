@@ -1,46 +1,45 @@
 {% extends "base.html" %}
 {% load static %}
-
-
+<link rel="stylesheet" href="{% static 'main/css/index.css' %}">
 {% block content %}
-    <!-- Hero -->
-    <section class="hero">
-        <div class="container">
-            <h1>Tadqiqotlarni baham ko'ring va o'rganing</h1>
-            <p>Minglab ekspertlar tomonidan ko'rib chiqilgan tadqiqot ishlariga kiring, mualliflar bilan hamkorlik
-                qiling va global bilim fondiga hissa qo'shing.</p>
+    <!-- 🌌 Hero Section -->
+    <section class="hero position-relative text-center text-white d-flex align-items-center"
+             style="background: linear-gradient(rgba(10, 10, 10, 0.6), rgba(10, 10, 10, 0.6)), url('https://unsplash.com/photos/_7dYmkqxHO8/download?ixid=M3wxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNzYxNDYzNzgxfA&force=true') center/cover no-repeat;
+                min-height: 90vh;">
+        <div class="container py-5">
+            <h1 class="display-4 fw-bold mb-4 animate__animated animate__fadeInDown text-white">
+                Tadqiqotlarni baham ko'ring va o'rganing
+            </h1>
+            <p class="lead mb-5 text-light animate__animated animate__fadeInUp"
+               style="max-width: 750px; margin: 0 auto;">
+                Minglab ekspertlar tomonidan ko‘rib chiqilgan tadqiqot ishlariga kiring, mualliflar bilan hamkorlik
+                qiling
+                va global bilim fondiga hissa qo‘shing.
+            </p>
 
-            <!-- Centered input-group for perfect alignment -->
-            <div class="row justify-content-center">
-                <div class="col-12 col-sm-10 col-md-9 col-lg-7">
-                    <form method="get" action="{% url 'main' %}" role="search" class="d-block">
-                        <div class="input-group input-group-lg">
-                            <input
-                                    type="search"
-                                    name="q"
-                                    value="{{ request.GET.q }}"
-                                    class="form-control"
-                                    placeholder="Maqolalarni avtor, nom va kalit so'zlar bo'yicha qidiring"
-                                    aria-label="Search papers"
-                            />
-                            <button class="btn btn-primary" type="submit" aria-label="Search">
-                                Qidirish
-                            </button>
-                        </div>
-                    </form>
+            <!-- 🔍 Search Bar -->
+            <form role="search" method="get" action="{% url 'all_papers' %}" class="mx-auto" style="max-width: 650px;">
+                <div class="input-group input-group-lg shadow-lg">
+                    <input type="search" name="q" class="form-control" placeholder="Maqolalarni qidiring..."
+                           aria-label="Search papers" required>
+                    <button class="btn btn-primary px-4" type="submit">Qidirish</button>
                 </div>
-            </div>
+            </form>
         </div>
+
+        <!-- ✨ Gradient Overlay -->
+        <div class="position-absolute top-0 start-0 w-100 h-100"
+             style="background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.85)); z-index: -1;"></div>
     </section>
 
     {% if user.is_authenticated %}
         <!-- User Actions -->
-        <div class="mt-4 d-flex justify-content-center gap-3 flex-wrap">
-            <a href="{% url 'my_papers' %}" class="btn btn-outline-secondary rounded-pill px-4 py-2 fw-medium">
+        <div class="mt-5 d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'my_papers' %}" class="btn btn-primary rounded-pill px-4 py-2 fw-medium">
                 Mening maqolalarim
             </a>
             <a href="{% url 'upload_paper' %}" class="btn btn-primary rounded-pill px-4 py-2 fw-medium text-white">
-                Maqola yuklash+
+                Maqola yuklash +
             </a>
             {%if user.is_superuser%}
             <a href="{% url 'admin_waitlist' %}" class="btn btn-primary rounded-pill px-4 py-2 fw-medium text-white">
@@ -50,26 +49,60 @@
         </div>
     {% endif %}
 
+    <!-- 📰 Latest Papers Section -->
     <section class="container my-5">
         <div class="text-center mb-5">
-            <h2 class="fw-bold">{{page_title}}</h2>
-            <p class="text-muted">Eng so'nggi va muhim tadqiqotlarni o'rganing</p>
+            <h2 class="fw-bold display-6">So‘ngi maqolalar</h2>
+            <p class="text-muted">Eng so‘nggi va muhim tadqiqotlarni o‘rganing</p>
         </div>
 
         <div class="row g-4">
-        {% for i in papers %}
-            <div class="col-12 col-sm-6 col-lg-4 d-flex">
-                <div class="card p-4 flex-fill">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ i.title }}</h5>
-                        <p class="text-muted small mb-2">{{ i.owner.first_name }} {{ i.owner.last_name }} · {{ i.published_at.year }}</p>
-                        <p>{{ i.summary|truncatewords:20 }}</p>
-                        <a href="{% url 'detail_paper' i.id %}" class="text-primary fw-semibold">Ko'rish →</a>
+            {% for i in papers %}
+                <div class="col-12 col-sm-6 col-lg-4 d-flex">
+                    <div class="card border-0 shadow-sm flex-fill paper-card">
+                        <div class="card-body p-4">
+                            <h5 class="card-title fw-semibold">{{ i.title }}</h5>
+                            <p class="text-muted small mb-2">
+                                {{ i.owner.first_name }} · {{ i.published_at|date:"Y" }}
+                            </p>
+                            <p class="text-secondary">{{ i.summary|truncatewords:20 }}</p>
+                            <a href="{% url 'detail_paper' i.id %}"
+                               class="fw-semibold text-decoration-none text-primary">
+                                Ko‘rish →
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% empty %}
+                <p class="text-center text-muted">Hozircha maqolalar mavjud emas.</p>
+            {% endfor %}
         </div>
     </section>
+
+    <!-- 🌍 Join Us Section -->
+    <section class="join-us-section text-white py-5"
+             style="background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+                min-height: 85vh;">
+        <div class="container text-center py-5">
+            <h2 class="fw-bold mb-4 display-5">Ilmiy hamjamiyatimizga qo‘shiling!</h2>
+            <p class="lead mb-5 mx-auto" style="max-width: 800px;">
+                Sizning tadqiqotingiz — kelajak avlodlar uchun ilhom manbai bo‘lishi mumkin.
+                O‘z maqolangizni joylashtiring, fikrlaringizni baham ko‘ring va ilmiy jamoaning ajralmas qismiga
+                aylaning.
+                Har bir hissa insoniyat bilimlarini kengaytiradi va yangi avlod tadqiqotchilariga yo‘l ochadi.
+            </p>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'upload_paper' %}" class="btn btn-light btn-lg rounded-pill px-5 py-3 fw-medium">
+                    Maqolangizni joylashtiring →
+                </a>
+            {% else %}
+                <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg rounded-pill px-5 py-3 fw-medium">
+                    Ro‘yxatdan o‘tish va maqola joylashtirish →
+                </a>
+            {% endif %}
+        </div>
+    </section>
+
 
 {% endblock %}

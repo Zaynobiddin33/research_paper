@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, AbstractUser
-
+from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator
 from django.db import models
 
 
@@ -20,30 +20,83 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
-    
-    @property
-    def full_name(self):
-        return f"{self.first_name} {self.last_name}"
 
 
 class Paper(models.Model):
+    STATUS_CHOICES = [
+        (1, 'draft'),
+        (2, 'on_process'),
+        (3, 'declined'),
+        (4, 'accepted'),
+        (5, 'payment_process'),
+        (6, 'blocked')
+    ]
+
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
-    title = models.TextField()
-    summary = models.TextField()
-    intro = models.TextField()
-    citations = models.TextField()
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)
+
+    title = models.CharField(
+        max_length=255,
+        validators=[MinLengthValidator(10)],
+        help_text="Sarlavha 10–255 belgidan iborat bo‘lishi kerak."
+    )
+
+    summary = models.TextField(
+        validators=[MinLengthValidator(100)],
+        help_text="Qisqacha mazmun kamida 100 ta belgidan iborat bo‘lishi kerak."
+    )
+
+    intro = models.TextField(
+        validators=[MinLengthValidator(300)],
+        help_text="Kirish qismi kamida 300 ta belgidan iborat bo‘lishi kerak."
+    )
+
+    citations = models.TextField(
+        validators=[MinLengthValidator(50)],
+        help_text="Iqtiboslar ro‘yxati kamida 50 ta belgidan iborat bo‘lishi kerak."
+    )
+
     file = models.FileField(upload_to='pdfs/')
-    status = models.IntegerField(choices=[(1, 'draft'), (2, 'on_process'), (3, 'declined'), (4, 'accepted')])
+
+    status = models.IntegerField(
+        choices=STATUS_CHOICES,
+        default=1,
+        help_text="Maqolaning joriy holatini tanlang."
+    )
+
     published_at = models.DateField(auto_now=True)
-    keywords = models.TextField()
-    pages = models.IntegerField()
-    organization = models.CharField(max_length=250)
+
+    keywords = models.CharField(
+        max_length=300,
+        validators=[MinLengthValidator(10)],
+        help_text="Kalit so‘zlar 10–300 belgidan iborat bo‘lishi kerak."
+    )
+
+    pages = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(50)],
+        null=True,
+        blank=True,
+        help_text="Betlar soni 3–50 oralig‘ida bo‘lishi kerak."
+    )
+
+    organization = models.CharField(
+        max_length=120,
+        validators=[MinLengthValidator(5)],
+        null=True,
+        blank=True,
+        help_text="Tashkilot nomi 5–120 belgidan iborat bo‘lishi kerak."
+    )
     paid_at = models.DateTimeField(null=True, blank=True)
+
+    reject_count = models.IntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        if self.reject_count>=5:
+            self.status = 6
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
-
 
 class OTP(models.Model):
     code = models.IntegerField(unique=True)
@@ -77,3 +130,11 @@ class Creator(models.Model):
 class Comment(models.Model):
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
     comment = models.TextField()
+    written_at = models.DateTimeField(auto_now_add=True)
+
+class Payment(models.Model):
+    check_image = models.ImageField('checks/')
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
+    is_accepted = models.BooleanField(default=False)
+    status = models.IntegerField(choices=[(1, 'sent'), (2, 'approved'), (3, 'denied')], default=1)
+    paid_at = models.DateTimeField(auto_now_add=True)

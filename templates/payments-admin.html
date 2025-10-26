@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'main/css/papers.css' %}">
+<style>
+    body {
+        background-color: #fff;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .review-container {
+        padding: 100px 0 60px 0;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #111827;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .page-subtitle {
+        color: #6b7280;
+        font-size: 1rem;
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .payment-card {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+    }
+
+    .payment-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Square cropped image inside card */
+    .payment-img {
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+        background-color: #f9fafb;
+        display: block;
+    }
+
+    .payment-body {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .payment-user {
+        font-weight: 600;
+        color: #111827;
+        margin-bottom: 6px;
+    }
+
+    .payment-date {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin-bottom: 16px;
+    }
+
+    .btn-approve {
+        background-color: #16a34a;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 8px 18px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .btn-approve:hover {
+        background-color: #15803d;
+        transform: translateY(-2px);
+    }
+
+    .btn-deny {
+        background-color: #dc2626;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 8px 18px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .btn-deny:hover {
+        background-color: #b91c1c;
+        transform: translateY(-2px);
+    }
+
+    /* Fullscreen modal view */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.95);
+        justify-content: center;
+        align-items: center;
+        backdrop-filter: blur(4px);
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    .modal img {
+        max-width: 95%;
+        max-height: 90vh;
+        object-fit: contain;
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(255,255,255,0.15);
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 20px;
+        right: 40px;
+        color: #fff;
+        font-size: 35px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close-btn:hover {
+        color: #ccc;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="review-container">
+    <div class="d-flex justify-content-center">
+        <a href="{% url 'payments_stats' %}" class="btn btn-primary rounded-pill px-5 py-3 fw-medium">To'lovlar statistikasi</a>
+        <br>
+    </div>
+    <br>
+    <h1 class="page-title">To‘lovlarni Tekshirish</h1>
+    <p class="page-subtitle">Admin sahifasi — foydalanuvchilar yuborgan to‘lov cheklarini to‘liq ko‘rib chiqing.</p>
+
+    <div class="row g-4">
+        {% for payment in payments %}
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="payment-card">
+                    <img src="{{ payment.check_image.url }}" alt="Payment Screenshot" class="payment-img" onclick="openModal('{{ payment.check_image.url }}')">
+                    <div class="payment-body">
+                        <div class="payment-user">{{ payment.paper.owner.first_name }} {{ payment.paper.owner.last_name }}</div>
+                            <a href="{%url 'accept_payment' payment.id%}" class="btn-approve">Tasdiqlash</a>
+                            <a href="{%url 'deny_payment' payment.id%}" class="btn-deny">Rad etish</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-center text-muted mt-4">Hozircha to‘lovlar mavjud emas.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Fullscreen modal -->
+<div id="imageModal" class="modal" onclick="closeModal()">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <img id="modalImage" src="" alt="Fullscreen image">
+</div>
+
+<script>
+function openModal(src) {
+    const modal = document.getElementById('imageModal');
+    const img = document.getElementById('modalImage');
+    img.src = src;
+    modal.classList.add('active');
+}
+
+function closeModal() {
+    document.getElementById('imageModal').classList.remove('active');
+}
+</script>
+{% endblock %}

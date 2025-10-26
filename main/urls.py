@@ -15,6 +15,7 @@ urlpatterns = [
 
     # Papers
     path('upload-paper/', UploadPaperView.as_view(), name='upload_paper'),
+    path('all-papers/', AllPapersView.as_view(), name='all_papers'),
     path('my-papers/', MyPapersView.as_view(), name='my_papers'),
     path('my-paper/<int:pk>/', MyPaperDetailView.as_view(), name='my_paper'),
     path('detail-paper/<int:id>/', PaperDetailView.as_view(), name='detail_paper'),
@@ -27,6 +28,15 @@ urlpatterns = [
 
     path('paper-accept/<int:id>', accept_paper, name='accept_paper'),
     path('deny_paper/<int:id>', deny_paper, name='deny_paper'),
+    path('success-payment/', success_payment, name='success_payment'),
+
+    path('payments/', payments, name='payments'),
+    path('payment-accept/<int:id>', accept_payment, name='accept_payment'),
+    path('payment-deny/<int:id>', deny_payment, name='deny_payment'),
+    path('payment-stats/', payments_stats, name='payments_stats'),
+
+    path('paper-edit/<int:id>', edit_paper, name='edit_paper'),
+    path('paper-resubmit/<int:id>', resubmit_paper, name='resubmit_paper'),
 ]
 
 if settings.DEBUG:

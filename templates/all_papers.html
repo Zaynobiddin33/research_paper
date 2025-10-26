@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'main/css/all_papers.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <section
+            class="hero position-relative text-white text-center d-flex align-items-center justify-content-center"
+            style="background: url('https://plus.unsplash.com/premium_photo-1663013462043-1caddf51bae1?fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fHNjaWVuY2UlMjBsYWJ8ZW58MHx8MHx8fDA%3D&ixlib=rb-4.1.0&q=60&w=3000') center center/cover no-repeat;"
+    >
+        <div class="overlay"></div>
+        <div class="container position-relative z-1">
+            <h1 class="fw-bold mb-3">Tadqiqot maqolalarini o‘rganing</h1>
+            <p class="lead mb-4">Eng so‘nggi ilmiy ishlarga nazar tashlang, o‘qing va bilim doirangizni kengaytiring.</p>
+        </div>
+    </section>
+
+    <!-- Filter Form -->
+    <section class="container mt-5">
+        <form method="get" class="filter-form">
+            <div class="row justify-content-center g-3">
+                <div class="col-12 col-md-6">
+                    <input type="text" name="q" value="{{ request.GET.q }}"
+                           class="form-control form-control-lg rounded-pill shadow-sm"
+                           placeholder="Maqola nomi, muallif yoki kalit so‘z bo‘yicha qidiring...">
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <select name="category" class="form-select form-select-lg rounded-pill shadow-sm">
+                        <option value="">Barcha kategoriyalar</option>
+                        {% for cat in categories %}
+                            <option value="{{ cat.id }}"
+                                    {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
+                                {{ cat.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-12 col-md-2 text-center">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-pill w-100 shadow-sm">
+                        Qidirish
+                    </button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <!-- Papers List -->
+    <section class="container my-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Barcha maqolalar</h2>
+            <p class="text-muted">So‘nggi nashr qilingan maqolalarni o‘rganing</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            {% for paper in papers %}
+                <div class="col-12 col-sm-6 col-lg-4 d-flex">
+                    <div class="card p-4 flex-fill shadow-sm border-0 paper-card">
+                        <div class="card-body">
+                            <h5 class="card-title fw-semibold">{{ paper.title }}</h5>
+                            <p class="text-muted small mb-2">
+                                {{ paper.owner.first_name }} · {{ paper.published_at|date:"Y" }}
+                            </p>
+                            <p>{{ paper.summary|truncatewords:25 }}</p>
+                            <a href="{% url 'detail_paper' paper.id %}" class="text-primary fw-semibold text-decoration-none">
+                                Ko‘rish →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-center text-muted">Hozircha maqolalar mavjud emas.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+            <div class="pagination-container mt-5 d-flex justify-content-center align-items-center gap-2 flex-wrap">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}&q={{ request.GET.q }}&category={{ request.GET.category }}"
+                       class="btn btn-outline-primary rounded-pill px-3">← Oldingi</a>
+                {% else %}
+                    <span class="btn btn-outline-secondary rounded-pill px-3 disabled">← Oldingi</span>
+                {% endif %}
+
+                <ul class="pagination mb-0">
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if num == page_obj.number %}
+                            <li class="page-item active">
+                                <span class="page-link border-primary bg-primary text-white rounded-pill">{{ num }}</span>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a href="?page={{ num }}&q={{ request.GET.q }}&category={{ request.GET.category }}"
+                                   class="page-link rounded-pill text-primary border-0">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}&q={{ request.GET.q }}&category={{ request.GET.category }}"
+                       class="btn btn-outline-primary rounded-pill px-3">Keyingi →</a>
+                {% else %}
+                    <span class="btn btn-outline-secondary rounded-pill px-3 disabled">Keyingi →</span>
+                {% endif %}
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}
