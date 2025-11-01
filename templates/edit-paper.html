@@ -13,7 +13,7 @@
     <section class="upload-section">
         <div class="container">
             <div class="upload-box">
-                <h2>Maqolangizni yuklang</h2>
+                <h2>Maqolangizni o'zgartiring</h2>
 
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -21,38 +21,44 @@
                     <!-- Title -->
                     <div class="mb-3">
                         <label for="title" class="form-label">Sarlavha</label>
-                        <input name="title" type="text" class="form-control" id="title"
-                               placeholder="Sarlavha (1–100 belgidan iborat bo‘lsin)"
-                               minlength="1" maxlength="100" required>
-                        <div class="form-text">Sarlavha 1–100 belgidan iborat bo‘lishi kerak.</div>
+                        <input value="{{paper.title}}" name="title" type="text" class="form-control" id="title"
+                               placeholder="Sarlavha (10–255 belgidan iborat bo‘lsin)"
+                               minlength="10" maxlength="255" required>
+                        <div class="form-text">Sarlavha 10–255 belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
                     <!-- Summary -->
                     <div class="mb-3">
                         <label for="summary" class="form-label">Annotatsiya</label>
                         <textarea name="abstract" class="form-control" id="summary" rows="4"
-                                  placeholder="Kamida 100 belgi yozing..." minlength="100" maxlength="500"
-                                  required></textarea>
+                                  placeholder="Kamida 100 belgi yozing..." minlength="100" required>{{paper.abstract}}</textarea>
                         <div class="form-text">Hulosa kamida 100 ta belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
                     <!-- Intro -->
                     <div class="mb-3">
-                        <label for="editor" class="form-label">Asosiy qism</label>
-                        <textarea name="intro" class="form-control" id="editor" rows="3"
-                                  placeholder="Asosiy qism kamida 100ta belgidan iborat bo'lsin..."
-                                  minlength="100" maxlength="500" required></textarea>
-                        <div class="form-text">Kirish qismi kamida 100 ta belgidan iborat bo‘lishi kerak.</div>
+                        <label for="editor" class="form-label">Asosiy Qism</label>
+                        <textarea name="intro" class="form-control" id="editor" rows="5"
+                                  placeholder="Kirish qismi kamida 300 belgi bo‘lsin..."
+                                  minlength="300" required>{{paper.intro}}</textarea>
+                        <div class="form-text">Kirish qismi kamida 300 ta belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
+                    <!-- Citations -->
+                    <div class="mb-3">
+                        <label for="citations" class="form-label">Sitatalar</label>
+                        <textarea name="citations" class="form-control" id="citations" rows="4"
+                                  placeholder="Sitatalarni kiriting..." required>{{paper.citations}}</textarea>
+                        <div class="form-text">Sitatalar kamida 50 ta belgidan iborat bo‘lishi kerak.</div>
+                    </div>
 
                     <!-- Keywords -->
                     <div class="mb-3">
                         <label for="keywords" class="form-label">Kalit so‘zlar (3+ kalit so‘z tavsiya etiladi)</label>
-                        <input type="text" name="keywords" class="form-control" id="keywords"
+                        <input value="{{paper.keywords}}" type="text" name="keywords" class="form-control" id="keywords"
                                placeholder="AI, Machine Learning, Dasturlash, Python"
-                               minlength="10" maxlength="100" required>
-                        <div class="form-text">Kalit so‘zlar 10–100 belgidan iborat bo‘lishi kerak.</div>
+                               minlength="10" maxlength="300" required>
+                        <div class="form-text">Kalit so‘zlar 10–300 belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
                     <!-- Category -->
@@ -60,7 +66,11 @@
                         <label for="category" class="form-label">Kategoriya</label>
                         <select class="form-select" name="category" id="category" required>
                             {% for category in categories %}
+                                {%if category == paper.category%}
+                                <option selected value="{{ category.name }}">{{ category.name }}</option>
+                                {%else%}
                                 <option value="{{ category.name }}">{{ category.name }}</option>
+                                {%endif%}
                             {% endfor %}
                         </select>
                     </div>
@@ -68,24 +78,18 @@
                     <!-- Optional Organization -->
                     <div class="mb-3">
                         <label for="organization" class="form-label">Muassasa va guruh nomi (ixtiyoriy)</label>
-                        <input type="text" name="organization" id="organization" class="form-control"
+                        <input value="{{paper.organization}}" type="text" name="organization" id="organization" class="form-control"
                                placeholder="Misol: Toshkent Davlat Universiteti"
-                               minlength="1" maxlength="120">
-                        <div class="form-text">Tashkilot nomi 1–120 belgidan iborat bo‘lishi kerak.</div>
+                               minlength="5" maxlength="120">
+                        <div class="form-text">Tashkilot nomi 5–120 belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
-                    <!-- Citations -->
-                    <div class="mb-3">
-                        <label for="citations" class="form-label">Foydalanilgan adabiyotlar</label>
-                        <textarea name="citations" class="form-control" id="citations" rows="5"
-                                  placeholder="Kirish qismi kamida 100 belgi bo‘lsin..." required></textarea>
-                    </div>
 
 
                     <!-- PDF Upload -->
                     <div class="mb-4">
                         <label for="file" class="form-label">PDF yuklash</label>
-                        <input name="file" class="form-control" type="file" id="file" accept=".pdf" required>
+                        <input name="file" class="form-control" type="file" id="file" accept=".pdf">
                         <div class="form-text">Faqat PDF fayllar qabul qilinadi.</div>
                     </div>
 
@@ -110,7 +114,7 @@
         </div>
     </section>
 
-<script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
 <script>
 ClassicEditor
 .create(document.querySelector('#editor'), {

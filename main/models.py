@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User, AbstractUser
-
+from django.core.validators import MinLengthValidator
 from django.db import models
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 # Create your models here.
@@ -17,48 +18,83 @@ class Category(models.Model):
 
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to='media/avatars/', null=True, blank=True)
+    status = models.IntegerField(default=0)
 
     def __str__(self):
         return self.username
-    
-    @property
-    def full_name(self):
-        return f"{self.first_name} {self.last_name}"
 
 
 class Paper(models.Model):
+    STATUS_CHOICES = [
+        (1, 'draft'),
+        (2, 'on_process'),
+        (3, 'declined'),
+        (4, 'accepted'),
+        (5, 'payment_process'),
+        (6, 'blocked')
+    ]
+
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
-    title = models.TextField()
-    summary = models.TextField()
-    intro = models.TextField()
-    citations = models.TextField()
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)
+
+    title = models.CharField(
+        max_length=100,
+        validators=[MinLengthValidator(1)],
+        help_text="Sarlavha 10–255 belgidan iborat bo‘lishi kerak."
+    )
+
+    abstract = models.TextField(
+        max_length=500,
+        validators=[MinLengthValidator(100)],
+        help_text="Qisqacha mazmun kamida 100 ta belgidan iborat bo‘lishi kerak."
+    )
+
+    intro = RichTextUploadingField()
+
     file = models.FileField(upload_to='pdfs/')
-    status = models.IntegerField(choices=[(1, 'draft'), (2, 'on_process'), (3, 'declined'), (4, 'accepted')])
+
+    status = models.IntegerField(
+        choices=STATUS_CHOICES,
+        default=1,
+        help_text="Maqolaning joriy holatini tanlang."
+    )
+
     published_at = models.DateField(auto_now=True)
-    keywords = models.TextField()
-    pages = models.IntegerField()
-    organization = models.CharField(max_length=250)
+
+    keywords = models.CharField(
+        max_length=100,
+        validators=[MinLengthValidator(10)],
+        help_text="Kalit so‘zlar 10–300 belgidan iborat bo‘lishi kerak."
+    )
+
+    pages = models.IntegerField(
+        null=True,
+        blank=True,
+        help_text="Betlar soni 3–50 oralig‘ida bo‘lishi kerak."
+    )
+
+    organization = models.CharField(
+        max_length=120,
+        validators=[MinLengthValidator(1)],
+        null=True,
+        blank=True,
+        help_text="Tashkilot nomi 5–120 belgidan iborat bo‘lishi kerak."
+    )
     paid_at = models.DateTimeField(null=True, blank=True)
+
+    reject_count = models.IntegerField(default=0)
+
+    citations = models.TextField(null=True)
+
+    certificate = models.FileField(null=True)
+
+    def save(self, *args, **kwargs):
+        if self.reject_count>=5:
+            self.status = 6
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
-
-
-class OTP(models.Model):
-    code = models.IntegerField(unique=True)
-    paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=True, blank=True)
-
-    class Meta:
-        verbose_name_plural = "OTPs"
-
-
-    def save(self, *args, **kwargs):
-        if self.paper:
-            paper = Paper.objects.get(id=self.paper.id)
-            paper.status = 2
-            paper.save()
-        return super().save(*args, **kwargs)
 
 
 class Creator(models.Model):
@@ -77,3 +113,11 @@ class Creator(models.Model):
 class Comment(models.Model):
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
     comment = models.TextField()
+    written_at = models.DateTimeField(auto_now_add=True)
+
+class Payment(models.Model):
+    check_image = models.ImageField('checks/')
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
+    is_accepted = models.BooleanField(default=False)
+    status = models.IntegerField(choices=[(1, 'sent'), (2, 'approved'), (3, 'denied')], default=1)
+    paid_at = models.DateTimeField(auto_now_add=True)

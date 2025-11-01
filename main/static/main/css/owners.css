@@ -26,13 +26,13 @@ nav {
 }
 
 .hero h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
+    /* font-size: clamp(2rem, 5vw, 3rem); */
     font-weight: 700;
-    color: #111827;
+    color: white;
 }
 
 .hero p {
-    color: #4b5563;
+    color: #bbbbbb;
     font-size: 1.05rem;
     max-width: 680px;
     margin: 12px auto 0;

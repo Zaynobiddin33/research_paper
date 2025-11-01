@@ -4,8 +4,8 @@
 {% block content %}
     <!-- 🌌 Hero Section -->
     <section class="hero position-relative text-center text-white d-flex align-items-center"
-             style="background: linear-gradient(rgba(10, 10, 10, 0.6), rgba(10, 10, 10, 0.6)), url('https://images.unsplash.com/photo-1532153955177-f59af40d6472?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
-                min-height: 90vh;">
+             style="background: linear-gradient(rgba(10, 10, 10, 0.6), rgba(10, 10, 10, 0.6)), url('https://unsplash.com/photos/_7dYmkqxHO8/download?ixid=M3wxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNzYxNDYzNzgxfA&force=true') center/cover no-repeat;
+                min-height: 94vh;">
         <div class="container py-5">
             <h1 class="display-4 fw-bold mb-4 animate__animated animate__fadeInDown text-white">
                 Tadqiqotlarni baham ko'ring va o'rganing
@@ -35,12 +35,17 @@
     {% if user.is_authenticated %}
         <!-- User Actions -->
         <div class="mt-5 d-flex justify-content-center gap-3 flex-wrap">
-            <a href="{% url 'my_papers' %}" class="btn btn-outline-light rounded-pill px-4 py-2 fw-medium">
+            <a href="{% url 'my_papers' %}" class="btn btn-primary rounded-pill px-4 py-2 fw-medium">
                 Mening maqolalarim
             </a>
             <a href="{% url 'upload_paper' %}" class="btn btn-primary rounded-pill px-4 py-2 fw-medium text-white">
                 Maqola yuklash +
             </a>
+            {%if user.is_superuser%}
+            <a href="{% url 'admin_waitlist' %}" class="btn btn-primary rounded-pill px-4 py-2 fw-medium text-white">
+                Maqola tekshiring 
+            </a>
+            {%endif%}
         </div>
     {% endif %}
 
@@ -58,9 +63,9 @@
                         <div class="card-body p-4">
                             <h5 class="card-title fw-semibold">{{ i.title }}</h5>
                             <p class="text-muted small mb-2">
-                                {{ i.owner.first_name }} · {{ i.published_at|date:"Y" }}
+                                {{ i.owner.first_name }} {{i.owner.last_name}} · {{ i.published_at|date:"Y" }}
                             </p>
-                            <p class="text-secondary">{{ i.summary|truncatewords:20 }}</p>
+                            <p class="text-secondary">{{ i.abstract|truncatewords:20 }}</p>
                             <a href="{% url 'detail_paper' i.id %}"
                                class="fw-semibold text-decoration-none text-primary">
                                 Ko‘rish →
