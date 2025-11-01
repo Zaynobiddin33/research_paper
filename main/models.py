@@ -40,7 +40,7 @@ class Paper(models.Model):
     title = models.CharField(
         max_length=100,
         validators=[MinLengthValidator(1)],
-        help_text="Sarlavha 10–255 belgidan iborat bo‘lishi kerak."
+        help_text="Sarlavha 1–100 belgidan iborat bo‘lishi kerak."
     )
 
     abstract = models.TextField(
