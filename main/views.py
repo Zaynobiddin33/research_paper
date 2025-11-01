@@ -76,7 +76,6 @@ class LogoutView(LoginRequiredMixin, View):
         return redirect('main')
 
 
-
 class MainView(ListView):
     model = Paper
     template_name = 'templates/main-page.html'
@@ -157,8 +156,8 @@ class UploadPaperView(LoginRequiredMixin, View):
             file=file,
             category=category,
             keywords=data['keywords'],
-            organization = data['organization'],
-            citations = data['citations'],
+            organization=data['organization'],
+            citations=data['citations'],
             pages=pages,
             status=1
         )
@@ -233,15 +232,23 @@ class ProfileUpdateView(LoginRequiredMixin, View):
     template_name = 'settings.html'
 
     def get(self, request):
-        # Just render the page with user info
         return render(request, self.template_name)
 
     def post(self, request):
         user = request.user
+
+        # Update basic fields
         user.first_name = request.POST.get('first_name', user.first_name)
         user.last_name = request.POST.get('last_name', user.last_name)
         user.username = request.POST.get('username', user.username)
         user.save()
+
+        # Handle avatar upload
+        if 'avatar' in request.FILES:
+            user.avatar = request.FILES['avatar']
+            user.save()
+
+        messages.success(request, "Profil muvaffaqiyatli yangilandi ✅")
         return redirect('update_profile')
 
 
@@ -257,18 +264,19 @@ class PasswordChangeView(LoginRequiredMixin, View):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            messages.success(request, "Parol muvaffaqiyatli o`zgartirildi")# Keep user logged in
+            messages.success(request, "Parol muvaffaqiyatli o`zgartirildi")  # Keep user logged in
             return redirect('change_password')
         return render(request, self.template_name, {'password_form': form})
 
+
 @login_required(redirect_field_name='login')
 def apply_otp(request, id):
-    paper = models.Paper.objects.get(id = id)
+    paper = models.Paper.objects.get(id=id)
     if request.method == "POST":
         image = request.FILES['check']
         models.Payment.objects.create(
-            paper = paper,
-            check_image = image
+            paper=paper,
+            check_image=image
         )
         paper.status = 5
         paper.save()
@@ -283,6 +291,7 @@ def check_username(request):
         return JsonResponse({'exists': exists})
     return JsonResponse({'error': 'No username provided'}, status=400)
 
+
 @login_required(login_url='login')
 def admin_waitlist(request):
     if not request.user.is_superuser:
@@ -295,13 +304,14 @@ def admin_waitlist(request):
 
     return render(request, 'admin-waitlist.html', {'papers': papers})
 
+
 @login_required(redirect_field_name='login')
 def admin_paper_detail(request, id):
     context = {}
     if request.user.is_superuser:
-        paper = models.Paper.objects.get(id = id)
+        paper = models.Paper.objects.get(id=id)
         context = {
-            'paper':paper
+            'paper': paper
         }
     else:
         return redirect('main')
@@ -311,40 +321,44 @@ def admin_paper_detail(request, id):
 @login_required(redirect_field_name='login')
 def accept_paper(request, id):
     if request.user.is_superuser:
-        paper = models.Paper.objects.get(id = id)
+        paper = models.Paper.objects.get(id=id)
         paper.status = 4
-        certificate = give_certificate(paper.owner.first_name, paper.owner.last_name, paper.title, f'http://127.0.0.1:8000/detail-paper/{paper.id}')
+        certificate = give_certificate(paper.owner.first_name, paper.owner.last_name, paper.title,
+                                       f'http://127.0.0.1:8000/detail-paper/{paper.id}')
         paper.certificate = certificate
         paper.save()
         return redirect('admin_waitlist')
     else:
         return redirect('main')
 
+
 @login_required(redirect_field_name='login')
 def deny_paper(request, id):
     if request.user.is_superuser and request.method == 'POST':
-        paper = models.Paper.objects.get(id = id)
+        paper = models.Paper.objects.get(id=id)
         paper.status = 3
-        paper.reject_count+=1
+        paper.reject_count += 1
         paper.save()
         comment = request.POST['comment']
         models.Comment.objects.create(
-            comment = comment,
-            paper = paper
+            comment=comment,
+            paper=paper
         )
         return redirect('admin_waitlist')
     else:
         return redirect('main')
 
+
 @login_required(redirect_field_name='login')
 def success_payment(request):
     return render(request, 'success-payment.html')
+
 
 @login_required(redirect_field_name='login')
 def payments(request):
     context = {}
     if request.user.is_superuser and request.user.status == 1:
-        payments = models.Payment.objects.filter(status = 1).order_by('id')
+        payments = models.Payment.objects.filter(status=1).order_by('id')
         context = {
             'payments': payments
         }
@@ -352,10 +366,11 @@ def payments(request):
         return redirect('main')
     return render(request, 'payments-admin.html', context)
 
+
 @login_required(redirect_field_name='login')
 def accept_payment(request, id):
     if request.user.is_superuser and request.user.status == 1:
-        check = models.Payment.objects.get(id = id)
+        check = models.Payment.objects.get(id=id)
         check.status = 2
         paper = check.paper
         paper.status = 2
@@ -364,12 +379,12 @@ def accept_payment(request, id):
         return redirect('payments')
     else:
         return redirect('main')
-    
+
 
 @login_required(redirect_field_name='login')
 def deny_payment(request, id):
     if request.user.is_superuser and request.user.status == 1:
-        check = models.Payment.objects.get(id = id)
+        check = models.Payment.objects.get(id=id)
         check.status = 3
         paper = check.paper
         paper.status = 1
@@ -378,34 +393,36 @@ def deny_payment(request, id):
         return redirect('payments')
     else:
         return redirect('main')
-    
+
 
 @login_required(redirect_field_name='login')
 def payments_stats(request):
     if request.user.is_superuser and request.user.status == 1:
         now = timezone.now()
-        total_payments = models.Payment.objects.filter(status = 2).count()
-        total_sum = total_payments*20000
-        monthly_payments = models.Payment.objects.filter(paid_at__year = now.year, paid_at__month = now.month, status = 2).count()
-        monthly_sum = monthly_payments*20000
-        payments = models.Payment.objects.filter(status = 2).order_by('-paid_at')
+        total_payments = models.Payment.objects.filter(status=2).count()
+        total_sum = total_payments * 20000
+        monthly_payments = models.Payment.objects.filter(paid_at__year=now.year, paid_at__month=now.month,
+                                                         status=2).count()
+        monthly_sum = monthly_payments * 20000
+        payments = models.Payment.objects.filter(status=2).order_by('-paid_at')
 
         context = {
-            'total':total_payments,
-            'total_sum':total_sum,
-            'monthly':monthly_payments,
-            'monthly_sum':monthly_sum,
-            'payments':payments
+            'total': total_payments,
+            'total_sum': total_sum,
+            'monthly': monthly_payments,
+            'monthly_sum': monthly_sum,
+            'payments': payments
         }
     else:
         return redirect('main')
     return render(request, 'payment-stats.html', context)
 
+
 @login_required(redirect_field_name='login')
 def edit_paper(request, id):
-    paper = models.Paper.objects.filter(owner = request.user, id = id).first()
+    paper = models.Paper.objects.filter(owner=request.user, id=id).first()
     categories = models.Category.objects.all()
-    if paper.status in [1,3]:
+    if paper.status in [1, 3]:
         if request.method == 'POST':
             data = request.POST
             file = request.FILES.get('file')
@@ -430,10 +447,11 @@ def edit_paper(request, id):
         return redirect('main')
     return render(request, 'edit-paper.html', {'paper': paper, 'categories': categories})
 
+
 @login_required(redirect_field_name='login')
 def resubmit_paper(request, id):
-    paper = models.Paper.objects.get(id = id)
-    if paper.reject_count<5:
+    paper = models.Paper.objects.get(id=id)
+    if paper.reject_count < 5:
         paper.status = 2
         paper.save()
     return redirect('my_paper', paper.id)

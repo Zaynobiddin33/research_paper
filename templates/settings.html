@@ -3,32 +3,45 @@
 
 {% block style %}
     <link rel="stylesheet" href="{% static 'main/css/base.css' %}">
-
     <link rel="stylesheet" href="{% static 'main/css/settings.css' %}">
 {% endblock %}
 
 {% block content %}
     <div class="settings-container">
         <h1>Account Sozlamalari</h1>
+
         {% if messages %}
             <div class="messages-container">
                 {% for message in messages %}
                     <div class="alert
                     {% if message.tags == 'success' %} alert-success
                     {% elif message.tags == 'error' %} alert-error
-                    {% else %} alert-info {% endif %}">
+                    {% else %} alert-info
+                    {% endif %}">
                         {{ message }}
                     </div>
                 {% endfor %}
             </div>
         {% endif %}
+
         <div class="settings-grid">
 
-            <!-- Profile Info Form -->
+            <!-- Profile Settings -->
             <div class="settings-card">
                 <h2>Account haqida ma`lumot</h2>
-                <form method="POST" action="{% url 'update_profile' %}">
+                <form method="POST" action="{% url 'update_profile' %}" enctype="multipart/form-data">
                     {% csrf_token %}
+
+                    <!-- Avatar -->
+                    <div class="form-group" style="text-align:center;">
+                        <img src="{{ user.avatar.url }}" class="avatar-preview" id="avatarPreview"
+                             onerror="this.src='{% static 'main/img/default-avatar.png' %}'">
+
+                        <label for="avatar" style="display:block; margin-bottom:6px;">Profil rasmi</label>
+                        <input type="file" name="avatar" id="avatar" accept="image/*"
+                               onchange="previewAvatar(event)">
+                    </div>
+
                     <div class="form-group">
                         <label for="first_name">Ism</label>
                         <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}" required>
@@ -41,11 +54,12 @@
                         <label for="username">Username</label>
                         <input type="text" name="username" id="username" value="{{ user.username }}" required>
                     </div>
+
                     <button type="submit" class="btn">O`zgarishlarni saqlash</button>
                 </form>
             </div>
 
-            <!-- Change Password Form -->
+            <!-- Change Password Form (UNCHANGED) -->
             <div class="settings-card">
                 <h2>Parol ni o`zgartirish</h2>
                 <form method="POST" action="{% url 'change_password' %}">
@@ -74,4 +88,11 @@
 
         </div>
     </div>
+
+    <script>
+        function previewAvatar(event) {
+            const preview = document.getElementById('avatarPreview');
+            preview.src = URL.createObjectURL(event.target.files[0]);
+        }
+    </script>
 {% endblock %}
