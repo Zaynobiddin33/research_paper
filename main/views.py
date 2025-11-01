@@ -20,6 +20,7 @@ from django.db.models import Q
 from django.db.models.functions import Concat
 from django.db.models import F, Value
 from django.utils import timezone
+from .pdf_edit import give_certificate
 
 
 class RegisterView(View):
@@ -151,11 +152,13 @@ class UploadPaperView(LoginRequiredMixin, View):
         Paper.objects.create(
             owner=request.user,
             title=data['title'],
-            summary=data['summary'],
+            abstract=data['abstract'],
             intro=data['intro'],
             file=file,
             category=category,
             keywords=data['keywords'],
+            organization = data['organization'],
+            citations = data['citations'],
             pages=pages,
             status=1
         )
@@ -186,8 +189,9 @@ class AllPapersView(ListView):
         if query:
             queryset = queryset.filter(
                 Q(title__icontains=query) |
-                Q(summary__icontains=query) |
+                Q(abstract__icontains=query) |
                 Q(owner__first_name__icontains=query) |
+                Q(organization__icontains=query) |
                 Q(keywords__icontains=query)
             )
 
@@ -309,6 +313,8 @@ def accept_paper(request, id):
     if request.user.is_superuser:
         paper = models.Paper.objects.get(id = id)
         paper.status = 4
+        certificate = give_certificate(paper.owner.first_name, paper.owner.last_name, paper.title, f'http://127.0.0.1:8000/detail-paper/{paper.id}')
+        paper.certificate = certificate
         paper.save()
         return redirect('admin_waitlist')
     else:
@@ -337,7 +343,7 @@ def success_payment(request):
 @login_required(redirect_field_name='login')
 def payments(request):
     context = {}
-    if request.user.is_superuser:
+    if request.user.is_superuser and request.user.status == 1:
         payments = models.Payment.objects.filter(status = 1).order_by('id')
         context = {
             'payments': payments
@@ -348,7 +354,7 @@ def payments(request):
 
 @login_required(redirect_field_name='login')
 def accept_payment(request, id):
-    if request.user.is_superuser:
+    if request.user.is_superuser and request.user.status == 1:
         check = models.Payment.objects.get(id = id)
         check.status = 2
         paper = check.paper
@@ -362,7 +368,7 @@ def accept_payment(request, id):
 
 @login_required(redirect_field_name='login')
 def deny_payment(request, id):
-    if request.user.is_superuser:
+    if request.user.is_superuser and request.user.status == 1:
         check = models.Payment.objects.get(id = id)
         check.status = 3
         paper = check.paper
@@ -376,7 +382,7 @@ def deny_payment(request, id):
 
 @login_required(redirect_field_name='login')
 def payments_stats(request):
-    if request.user.is_superuser:
+    if request.user.is_superuser and request.user.status == 1:
         now = timezone.now()
         total_payments = models.Payment.objects.filter(status = 2).count()
         total_sum = total_payments*20000
@@ -399,10 +405,10 @@ def payments_stats(request):
 def edit_paper(request, id):
     paper = models.Paper.objects.filter(owner = request.user, id = id).first()
     categories = models.Category.objects.all()
-    if paper.status ==1:
+    if paper.status in [1,3]:
         if request.method == 'POST':
             data = request.POST
-            file = request.FILES['file']
+            file = request.FILES.get('file')
             category = Category.objects.get(name=data['category'])
             if file:
                 pdf = PdfReader(file)
@@ -410,10 +416,12 @@ def edit_paper(request, id):
                 paper.pages = len(pdf.pages)
 
             paper.title = data['title']
-            paper.summary = data['summary']
+            paper.abstract = data['abstract']
             paper.intro = data['intro']
             paper.category = category
             paper.keywords = data['keywords']
+            paper.organization = data['organization']
+            paper.citations = data['citations']
             paper.status = 1
 
             paper.save()

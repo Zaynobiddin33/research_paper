@@ -29,16 +29,16 @@
 
                     <!-- Summary -->
                     <div class="mb-3">
-                        <label for="summary" class="form-label">Hulosa</label>
-                        <textarea name="summary" class="form-control" id="summary" rows="4"
-                                  placeholder="Kamida 100 belgi yozing..." minlength="100" required>{{paper.summary}}</textarea>
+                        <label for="summary" class="form-label">Annotatsiya</label>
+                        <textarea name="abstract" class="form-control" id="summary" rows="4"
+                                  placeholder="Kamida 100 belgi yozing..." minlength="100" required>{{paper.abstract}}</textarea>
                         <div class="form-text">Hulosa kamida 100 ta belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
                     <!-- Intro -->
                     <div class="mb-3">
-                        <label for="intro" class="form-label">Bu maqola nimani o‘rganadi?</label>
-                        <textarea name="intro" class="form-control" id="intro" rows="5"
+                        <label for="editor" class="form-label">Asosiy Qism</label>
+                        <textarea name="intro" class="form-control" id="editor" rows="5"
                                   placeholder="Kirish qismi kamida 300 belgi bo‘lsin..."
                                   minlength="300" required>{{paper.intro}}</textarea>
                         <div class="form-text">Kirish qismi kamida 300 ta belgidan iborat bo‘lishi kerak.</div>
@@ -48,7 +48,7 @@
                     <div class="mb-3">
                         <label for="citations" class="form-label">Sitatalar</label>
                         <textarea name="citations" class="form-control" id="citations" rows="4"
-                                  placeholder="Sitatalarni kiriting..." minlength="50" required>{{paper.citations}}</textarea>
+                                  placeholder="Sitatalarni kiriting..." required>{{paper.citations}}</textarea>
                         <div class="form-text">Sitatalar kamida 50 ta belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
@@ -77,25 +77,19 @@
 
                     <!-- Optional Organization -->
                     <div class="mb-3">
-                        <label for="organization" class="form-label">Tashkilot (ixtiyoriy)</label>
+                        <label for="organization" class="form-label">Muassasa va guruh nomi (ixtiyoriy)</label>
                         <input value="{{paper.organization}}" type="text" name="organization" id="organization" class="form-control"
                                placeholder="Misol: Toshkent Davlat Universiteti"
                                minlength="5" maxlength="120">
                         <div class="form-text">Tashkilot nomi 5–120 belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
-                    <!-- Optional Page Count -->
-                    <div class="mb-3">
-                        <label for="pages" class="form-label">Sahifalar soni (ixtiyoriy)</label>
-                        <input type="number" name="pages" id="pages" class="form-control"
-                               placeholder="Masalan: 12" min="1" max="50">
-                        <div class="form-text">Sahifalar soni 1–50 oralig‘ida bo‘lishi kerak.</div>
-                    </div>
+
 
                     <!-- PDF Upload -->
                     <div class="mb-4">
                         <label for="file" class="form-label">PDF yuklash</label>
-                        <input name="file" class="form-control" type="file" id="file" accept=".pdf" required>
+                        <input name="file" class="form-control" type="file" id="file" accept=".pdf">
                         <div class="form-text">Faqat PDF fayllar qabul qilinadi.</div>
                     </div>
 
@@ -119,4 +113,36 @@
             </div>
         </div>
     </section>
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
+<script>
+ClassicEditor
+.create(document.querySelector('#editor'), {
+    simpleUpload: {
+        uploadUrl: '/upload/',  // your backend endpoint
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    }
+})
+.then(editor => {
+    console.log('Editor ready', editor);
+})
+.catch(error => console.error(error));
+</script>
+
+<script>
+ClassicEditor
+  .create(document.querySelector('#citations'), {
+    toolbar: ['numberedList', 'bulletedList', '|', 'undo', 'redo']
+  })
+  .then(editor => {
+    // 🪄 Automatically enable numbered list mode
+    editor.execute('numberedList');
+
+    // Optionally focus immediately
+    editor.editing.view.focus();
+  })
+  .catch(console.error);
+</script>
 {% endblock %}

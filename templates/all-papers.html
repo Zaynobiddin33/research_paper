@@ -9,7 +9,7 @@
     <!-- Hero Section -->
     <section
             class="hero position-relative text-white text-center d-flex align-items-center justify-content-center"
-            style="background: url('https://plus.unsplash.com/premium_photo-1663013462043-1caddf51bae1?fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fHNjaWVuY2UlMjBsYWJ8ZW58MHx8MHx8fDA%3D&ixlib=rb-4.1.0&q=60&w=3000') center center/cover no-repeat;"
+            style="background: url('https://unsplash.com/photos/ivXK5MLcb2Y/download?force=true') center center/cover no-repeat;"
     >
         <div class="overlay"></div>
         <div class="container position-relative z-1">
@@ -67,7 +67,7 @@
                             <p class="text-muted small mb-2">
                                 {{ paper.owner.first_name }} · {{ paper.published_at|date:"Y" }}
                             </p>
-                            <p>{{ paper.summary|truncatewords:25 }}</p>
+                            <p>{{ paper.abstract|truncatewords:25 }}</p>
                             <a href="{% url 'detail_paper' paper.id %}"
                                class="text-primary fw-semibold text-decoration-none">
                                 Ko‘rish →

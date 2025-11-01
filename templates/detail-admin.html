@@ -36,7 +36,7 @@
                 <div class="mb-3">
                     <h3 class="mb-2" style="font-size:1.05rem; font-weight:700;">Hulosa</h3>
                     <p class="paper-content" style="margin-top:6px;">
-                        {{ paper.summary }}
+                        {{ paper.abstract }}
                     </p>
                 </div>
 
@@ -46,12 +46,12 @@
                 <div class="mt-4">
                     <h3 style="font-size:1.02rem; font-weight:700; margin-bottom:10px;">Kirish</h3>
                     <p class="paper-content">
-                        {{ paper.intro }}
+                        {{ paper.intro |safe }}
                     </p>
 
-                    <h4 style="font-size:1rem; font-weight:700; margin-top:18px;">Iqtiboslar</h4>
+                    <h4 style="font-size:1rem; font-weight:700; margin-top:18px;">Foydalanilgan adabiyotlar</h4>
                     <ol style="line-height:1.6; margin-top:8px; color:#333">
-                        <li>{{ paper.citations }}</li>
+                        <li>{{ paper.citations | safe }}</li>
                     </ol>
                 </div>
 

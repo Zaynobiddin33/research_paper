@@ -13,7 +13,7 @@ class CustomUserAdmin(UserAdmin):
     readonly_fields = ("last_login", "date_joined")
 
     fieldsets = (
-        ("User Info", {"fields": ("username", "password")}),
+        ("User Info", {"fields": ("username", "password", 'status')}),
         ("Personal Info", {"fields": ("first_name", "last_name", "email", "avatar")}),
         ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
         ("Important Dates", {"fields": ("last_login", "date_joined")}),
@@ -40,7 +40,7 @@ class PaperAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("General Info", {
-            "fields": ("title", "summary", "intro", "citations", "keywords", "organization")
+            "fields": ("title", "intro", "keywords", "organization")
         }),
         ("Relations", {
             "fields": ("owner", "category")

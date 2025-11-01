@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User, AbstractUser
 from django.core.validators import MinLengthValidator
 from django.db import models
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 # Create your models here.
@@ -17,6 +18,7 @@ class Category(models.Model):
 
 class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to='media/avatars/', null=True, blank=True)
+    status = models.IntegerField(default=0)
 
     def __str__(self):
         return self.username
@@ -41,17 +43,13 @@ class Paper(models.Model):
         help_text="Sarlavha 10–255 belgidan iborat bo‘lishi kerak."
     )
 
-    summary = models.TextField(
+    abstract = models.TextField(
         max_length=500,
         validators=[MinLengthValidator(100)],
         help_text="Qisqacha mazmun kamida 100 ta belgidan iborat bo‘lishi kerak."
     )
 
-    intro = models.TextField(
-        max_length=500,
-        validators=[MinLengthValidator(100)],
-        help_text="Kirish qismi kamida 100 ta belgidan iborat bo‘lishi kerak."
-    )
+    intro = RichTextUploadingField()
 
     file = models.FileField(upload_to='pdfs/')
 
@@ -85,6 +83,10 @@ class Paper(models.Model):
     paid_at = models.DateTimeField(null=True, blank=True)
 
     reject_count = models.IntegerField(default=0)
+
+    citations = models.TextField(null=True)
+
+    certificate = models.FileField(null=True)
 
     def save(self, *args, **kwargs):
         if self.reject_count>=5:

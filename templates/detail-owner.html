@@ -34,9 +34,21 @@
     <!-- Paper Details -->
     <section class="container my-5">
         <div class="paper-card">
-            <h4 class="fw-semibold mb-3">Xulosa</h4>
+            <h4 class="fw-semibold mb-3">Annotatsiya</h4>
             <p class="text-muted mb-4">
-                {{ paper.summary }}
+                {{ paper.abstract }}
+            </p>
+
+
+            <h4 class="fw-semibold mb-3">Kirish</h4>
+            <p class="text-muted mb-4">
+                {{ paper.intro | safe }}
+            </p>
+
+
+            <h4 class="fw-semibold mb-3">Foydalanilgan adabiyotlar</h4>
+            <p class="text-muted mb-4">
+                {{ paper.citations | safe }}
             </p>
 
         <h4 class="fw-semibold mb-3">Kalit so'zlar</h4>
