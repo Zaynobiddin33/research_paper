@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, AbstractUser
-from django.core.validators import MinLengthValidator
+
 from django.db import models
 
 
@@ -20,69 +20,45 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+    
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
 
 
 class Paper(models.Model):
-    STATUS_CHOICES = [
-        (1, 'draft'),
-        (2, 'on_process'),
-        (3, 'declined'),
-        (4, 'accepted'),
-    ]
-
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)
-
-    title = models.CharField(
-        max_length=100,
-        validators=[MinLengthValidator(1)],
-        help_text="Sarlavha 10–255 belgidan iborat bo‘lishi kerak."
-    )
-
-    summary = models.TextField(
-        max_length=500,
-        validators=[MinLengthValidator(100)],
-        help_text="Qisqacha mazmun kamida 100 ta belgidan iborat bo‘lishi kerak."
-    )
-
-    intro = models.TextField(
-        max_length=500,
-        validators=[MinLengthValidator(100)],
-        help_text="Kirish qismi kamida 100 ta belgidan iborat bo‘lishi kerak."
-    )
-
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    title = models.TextField()
+    summary = models.TextField()
+    intro = models.TextField()
+    citations = models.TextField()
     file = models.FileField(upload_to='pdfs/')
-
-    status = models.IntegerField(
-        choices=STATUS_CHOICES,
-        default=1,
-        help_text="Maqolaning joriy holatini tanlang."
-    )
-
+    status = models.IntegerField(choices=[(1, 'draft'), (2, 'on_process'), (3, 'declined'), (4, 'accepted')])
     published_at = models.DateField(auto_now=True)
-
-    keywords = models.CharField(
-        max_length=100,
-        validators=[MinLengthValidator(10)],
-        help_text="Kalit so‘zlar 10–300 belgidan iborat bo‘lishi kerak."
-    )
-
-    pages = models.IntegerField(
-        null=True,
-        blank=True,
-        help_text="Betlar soni 3–50 oralig‘ida bo‘lishi kerak."
-    )
-
-    organization = models.CharField(
-        max_length=120,
-        validators=[MinLengthValidator(1)],
-        null=True,
-        blank=True,
-        help_text="Tashkilot nomi 5–120 belgidan iborat bo‘lishi kerak."
-    )
+    keywords = models.TextField()
+    pages = models.IntegerField()
+    organization = models.CharField(max_length=250)
+    paid_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.title
+
+
+class OTP(models.Model):
+    code = models.IntegerField(unique=True)
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "OTPs"
+
+
+    def save(self, *args, **kwargs):
+        if self.paper:
+            paper = Paper.objects.get(id=self.paper.id)
+            paper.status = 2
+            paper.save()
+        return super().save(*args, **kwargs)
 
 
 class Creator(models.Model):
@@ -97,3 +73,7 @@ class Creator(models.Model):
 
     def __str__(self):
         return self.name
+
+class Comment(models.Model):
+    paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
+    comment = models.TextField()

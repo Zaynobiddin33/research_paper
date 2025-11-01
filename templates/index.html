@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1>Tadqiqotlarni baham ko'ring va o'rganing</h1>
+            <p>Minglab ekspertlar tomonidan ko'rib chiqilgan tadqiqot ishlariga kiring, mualliflar bilan hamkorlik
+                qiling va global bilim fondiga hissa qo'shing.</p>
+
+            <!-- Centered input-group for perfect alignment -->
+            <div class="row justify-content-center">
+                <div class="col-12 col-sm-10 col-md-9 col-lg-7">
+                    <form method="get" action="{% url 'main' %}" role="search" class="d-block">
+                        <div class="input-group input-group-lg">
+                            <input
+                                    type="search"
+                                    name="q"
+                                    value="{{ request.GET.q }}"
+                                    class="form-control"
+                                    placeholder="Maqolalarni avtor, nom va kalit so'zlar bo'yicha qidiring"
+                                    aria-label="Search papers"
+                            />
+                            <button class="btn btn-primary" type="submit" aria-label="Search">
+                                Qidirish
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% if user.is_authenticated %}
+        <!-- User Actions -->
+        <div class="mt-4 d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'my_papers' %}" class="btn btn-outline-secondary rounded-pill px-4 py-2 fw-medium">
+                Mening maqolalarim
+            </a>
+            <a href="{% url 'upload_paper' %}" class="btn btn-primary rounded-pill px-4 py-2 fw-medium text-white">
+                Maqola yuklash+
+            </a>
+            {%if user.is_superuser%}
+            <a href="{% url 'admin_waitlist' %}" class="btn btn-primary rounded-pill px-4 py-2 fw-medium text-white">
+                Maqola tekshiring 
+            </a>
+            {%endif%}
+        </div>
+    {% endif %}
+
+    <section class="container my-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">{{page_title}}</h2>
+            <p class="text-muted">Eng so'nggi va muhim tadqiqotlarni o'rganing</p>
+        </div>
+
+        <div class="row g-4">
+        {% for i in papers %}
+            <div class="col-12 col-sm-6 col-lg-4 d-flex">
+                <div class="card p-4 flex-fill">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ i.title }}</h5>
+                        <p class="text-muted small mb-2">{{ i.owner.first_name }} {{ i.owner.last_name }} · {{ i.published_at.year }}</p>
+                        <p>{{ i.summary|truncatewords:20 }}</p>
+                        <a href="{% url 'detail_paper' i.id %}" class="text-primary fw-semibold">Ko'rish →</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </section>
+
+{% endblock %}

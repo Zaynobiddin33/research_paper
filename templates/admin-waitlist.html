@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'main/css/admin-waitlist.css' %}">
+<link rel="stylesheet" href="{% static 'main/css/upload.css' %}">
+{%endblock%}
+
+{%block content%}
+  <main>
+    <h2>Barcha Maqolalar</h2>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nomi</th>
+            <th>Muallif</th>
+            <th>Tashkilot</th>
+            <th>Sana</th>
+            <th>Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+            {%for paper in papers %}
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{paper.title}}</td>
+            <td>{{paper.owner.full_name}}</td>
+            <td>{{paper.organization}}</td>
+            <td>{{paper.published_at}}</td>
+            <td class="actions"><a href="{%url 'admin_paper_detail' paper.id%}">Ko‘rish</a></td>
+          </tr>
+          {%endfor%}
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+
+{%endblock%}

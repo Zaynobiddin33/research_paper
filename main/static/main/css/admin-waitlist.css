@@ -1,0 +1,125 @@
+body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+      color: #1f2937;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #1e293b;
+      color: white;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    header .admin-name {
+      font-size: 0.95rem;
+      opacity: 0.8;
+    }
+
+    main {
+      padding: 40px 60px;
+    }
+
+    h2 {
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    .table-container {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0;
+    }
+
+    thead {
+      background-color: #f3f4f6;
+    }
+
+    th, td {
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 0.95rem;
+      vertical-align: middle;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    th {
+      font-weight: 600;
+      color: #374151;
+    }
+
+    tbody tr:hover {
+      background-color: #f9fafb;
+    }
+
+    .badge {
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .badge-success {
+      background-color: #22c55e;
+      color: white;
+    }
+
+    .badge-pending {
+      background-color: #f59e0b;
+      color: white;
+    }
+
+    .actions a {
+      text-decoration: none;
+      color: #2563eb;
+      font-weight: 500;
+    }
+
+    .actions a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.9rem;
+      color: #6b7280;
+      border-top: 1px solid #e5e7eb;
+      background: #fff;
+      margin-top: 60px;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      main {
+        padding: 24px;
+      }
+
+      th, td {
+        font-size: 0.85rem;
+        padding: 10px 8px;
+      }
+    }
