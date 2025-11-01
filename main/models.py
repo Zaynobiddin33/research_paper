@@ -17,7 +17,7 @@ class Category(models.Model):
 
 
 class CustomUser(AbstractUser):
-    avatar = models.ImageField(upload_to='media/avatars/', null=True, blank=True)
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     status = models.IntegerField(default=0)
 
     def __str__(self):

@@ -2,12 +2,13 @@ from PyPDF2 import PdfReader
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
+from django.utils import timezone
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic import TemplateView, DetailView
@@ -15,11 +16,6 @@ from django.views.generic import TemplateView, DetailView
 from . import models
 from .forms import CustomPasswordChangeForm
 from .models import Paper, CustomUser, Category, Creator
-from django.http import JsonResponse
-from django.db.models import Q
-from django.db.models.functions import Concat
-from django.db.models import F, Value
-from django.utils import timezone
 from .pdf_edit import give_certificate
 
 
