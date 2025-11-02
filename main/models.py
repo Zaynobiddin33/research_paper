@@ -84,7 +84,7 @@ class Paper(models.Model):
 
     citations = models.TextField(null=True)
 
-    certificate = models.FileField(null=True)
+    certificate = models.FileField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if self.reject_count>=5:
@@ -116,6 +116,5 @@ class Comment(models.Model):
 class Payment(models.Model):
     check_image = models.ImageField(upload_to='checks/')
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
-    is_accepted = models.BooleanField(default=False)
     status = models.IntegerField(choices=[(1, 'sent'), (2, 'approved'), (3, 'denied')], default=1)
     paid_at = models.DateTimeField(auto_now_add=True)
