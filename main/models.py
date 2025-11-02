@@ -114,7 +114,7 @@ class Comment(models.Model):
     written_at = models.DateTimeField(auto_now_add=True)
 
 class Payment(models.Model):
-    check_image = models.ImageField('checks/')
+    check_image = models.ImageField(upload_to='checks/')
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
     is_accepted = models.BooleanField(default=False)
     status = models.IntegerField(choices=[(1, 'sent'), (2, 'approved'), (3, 'denied')], default=1)
