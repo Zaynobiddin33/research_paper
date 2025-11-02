@@ -57,7 +57,13 @@
             <h4 class="fw-semibold mt-4 mb-3">Fayl</h4>
             <a href="{{ paper.file.url }}" download="{{ paper.title }}.pdf"
                class="btn btn-outline-primary rounded-pill">PDF'ni yuklash</a>
-
+            {%if paper.status == 4%}
+            <a class="btn btn-outline-primary rounded-pill" href="{{ paper.certificate.url }}"
+                download="{{ paper.owner.first_name }}-{{ paper.owner.last_name }}.pptx"
+                aria-label="Download paper PDF">
+                Sertifikatni yuklash
+            </a>
+            {%endif%}
             <hr class="my-5"/>
 
         <h4 class="fw-semibold mb-3">Amallar</h4>
