@@ -13,3 +13,7 @@ user:
 
 reset:
 	python manage.py flush
+
+packages:
+	sudo apt update
+	sudo apt install libreoffice -y
