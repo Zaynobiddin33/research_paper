@@ -64,12 +64,15 @@
         <div class="d-flex flex-wrap gap-3">
             {% if paper.status == 1 or paper.status == 3%}
                 <a href="{% url 'edit_paper' paper.id %}" class="btn btn-edit">Maqolani tahrirlash</a>
-                <button type="button" class="btn btn-edit" data-bs-toggle="modal" data-bs-target="#resubmitModal">
-                Qayta yuborish {{paper.reject_count}}/5
-                </button>
+
             {% else %}
                 <button class="btn btn-edit" disabled>Maqolani tahrirlash</button>
             {% endif %}
+            {%if paper.status == 3%}
+                <button type="button" class="btn btn-edit" data-bs-toggle="modal" data-bs-target="#resubmitModal">
+                Qayta yuborish {{paper.reject_count}}/5
+                </button>
+            {%endif%}
             <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal"
                     data-bs-target="#deleteModal">Maqolani o'chirish
             </button>

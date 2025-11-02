@@ -351,20 +351,31 @@ def accept_paper(request, id):
     )
 
     # Combine the filled template and the existing paper
-    combined_docx = add_template(template, paper.file.path, f"combined/{paper.owner.first_name}-{paper.owner.last_name}.docx")
+    combined_docx = add_template(
+        template,
+        paper.file.path,
+        f"combined/{paper.owner.first_name}-{paper.owner.last_name}.docx"
+    )
 
-    # Convert to PDF (works on Linux/macOS)
-    pdf_path = f"pdfs/{paper.owner.first_name}-{paper.owner.last_name}-{datetime.now()}.pdf"
-    convert_to_pdf(combined_docx, f"media/{pdf_path}")
-    reader = PdfReader(f"media/{pdf_path}")
-    length = len(reader.pages)
+    # Ensure directories exist
+    os.makedirs("media/pdfs", exist_ok=True)
 
-    # Save the final PDF path to the paper model
+    # Convert to PDF
+    pdf_path = f"pdfs/{paper.owner.first_name}-{paper.owner.last_name}-{datetime.now().strftime('%d-%m-%Y-%H-%M-%S')}.pdf"
+    full_pdf_path = os.path.join("media", pdf_path)
+
+    convert_to_pdf(combined_docx, full_pdf_path)
+
+    # Count PDF pages
+    reader = PdfReader(full_pdf_path)
+    num_pages = len(reader.pages)
+
+    # Save to database
     paper.file.name = pdf_path
-    paper.pages = length
+    paper.pages = num_pages
     paper.save()
 
-    print(f"✅ Paper '{paper.title}' accepted and converted to PDF.")
+    print(f"✅ Paper '{paper.title}' accepted, converted to PDF, {num_pages} pages.")
     return redirect('admin_waitlist')
 
 @login_required(redirect_field_name='login')
@@ -472,10 +483,6 @@ def edit_paper(request, id):
             paper.keywords = data['keywords']
             paper.organization = data['organization']
             paper.citations = data['citations']
-            if paper.status == 3:
-                paper.status = 2
-            else:
-                paper.status = 1
 
             paper.save()
             return redirect('my_paper', paper.id)
@@ -487,7 +494,7 @@ def edit_paper(request, id):
 @login_required(redirect_field_name='login')
 def resubmit_paper(request, id):
     paper = models.Paper.objects.get(id=id)
-    if paper.reject_count < 5:
+    if paper.reject_count < 5 and paper.status == 3:
         paper.status = 2
         paper.save()
     return redirect('my_paper', paper.id)
