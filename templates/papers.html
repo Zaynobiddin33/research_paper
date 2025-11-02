@@ -31,6 +31,8 @@
                                 <span class="status-badge status-published">Nashr etilgan</span>
                             {% elif paper.status == 5 %}
                                 <span class="status-badge status-review">To'lov tekshirilmoqda</span>
+                            {% elif paper.status == 6 %}
+                                <span class="status-badge status-blocked">Maqola Bloklangan</span>
                             {% endif %}
 
                             <h5 class="card-title mt-2" style="min-height: 50px;">{{ paper.title|truncatewords:6 }}</h5>

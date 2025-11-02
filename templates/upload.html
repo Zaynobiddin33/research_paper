@@ -19,7 +19,7 @@
 
                     <!-- Title -->
                     <div class="mb-3">
-                        <label for="title" class="form-label">Sarlavha</label>
+                        <label for="title" class="form-label">Sarlavha (Title)</label>
                         <input name="title" type="text" class="form-control" id="title"
                                minlength="1" maxlength="100"
                                placeholder="Masalan: Sun’iy intellekt orqali tibbiy tashxislashning yangi usullari"
@@ -29,22 +29,22 @@
 
                     <!-- Summary -->
                     <div class="mb-3">
-                        <label for="summary" class="form-label">Annotatsiya</label>
+                        <label for="summary" class="form-label">Umumiy fikr (Abstract)</label>
                         <textarea name="abstract" class="form-control" id="summary" rows="4"
-                                  minlength="100" maxlength="500"
+                                  minlength="100" maxlength="2000"
                                   placeholder="Masalan: Ushbu tadqiqot sun’iy intellekt asosida tibbiy tasvirlar orqali kasalliklarni erta aniqlash samaradorligini baholaydi..."
                                   required></textarea>
-                        <div class="form-text">Umumiy fikr 100–500 belgidan iborat bo‘lishi kerak.</div>
+                        <div class="form-text">Umumiy fikr 100–2000 belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
                     <!-- Intro with CKEditor -->
                     <div class="mb-3">
-                        <label for="intro" class="form-label">Asosiy qism</label>
+                        <label for="intro" class="form-label">Kirish qism (Introduction)</label>
                         <textarea name="intro" class="form-control" id="intro" rows="5"
                                   placeholder="Kirish qismi kamida 100 belgi bo‘lsin..."
-                                  minlength="100" maxlength="500" required></textarea>
-                        <div class="form-text">Kirish qismi kamida 100 ta belgidan iborat bo‘lishi kerak.</div>
-                        
+                                  minlength="100" maxlength="2000" required></textarea>
+                        <div class="form-text">Kirish qismi 100-2000 ta belgidan iborat bo‘lishi kerak.</div>
+
                     </div>
 
                     <!-- Keywords -->
@@ -72,6 +72,8 @@
                         <input type="text" name="organization" id="organization" class="form-control"
                                placeholder="Misol: Toshkent Davlat Universiteti"
                                minlength="1" maxlength="120">
+                        <div class="form-text">Tashkilot nomi 1–120 belgidan iborat bo‘lishi kerak.</div>
+
                     </div>
 
                     <!-- Citations with CKEditor -->
@@ -82,7 +84,7 @@
                                   class="form-control"
                                   placeholder="1. Karimov, I. (2021). Axborot texnologiyalarining rivojlanishi. Toshkent: TDY."
                                   required></textarea>
-                        <div class="form-text">100–2000 belgi.</div>
+                        <div class="form-text">Foydalanilgan adabiyotlar 100–2000 belgidan iborat bo`lsin.</div>
                     </div>
 
                     <!-- PDF Upload -->

@@ -9,58 +9,64 @@
 {% endblock %}
 
 {% block content %}
-    <!-- Upload Section -->
     <section class="upload-section">
         <div class="container">
             <div class="upload-box">
-                <h2>Maqolangizni o'zgartiring</h2>
+                <h2>Maqolangizni o‘zgartiring</h2>
 
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     <!-- Title -->
                     <div class="mb-3">
-                        <label for="title" class="form-label">Sarlavha</label>
+                        <label for="title" class="form-label">Sarlavha (Title)</label>
                         <input value="{{ paper.title }}" name="title" type="text" class="form-control" id="title"
-                               placeholder="Sarlavha (10–255 belgidan iborat bo‘lsin)"
-                               minlength="10" maxlength="255" required>
-                        <div class="form-text">Sarlavha 10–255 belgidan iborat bo‘lishi kerak.</div>
+                               minlength="1" maxlength="100"
+                               placeholder="Masalan: Sun’iy intellekt orqali tibbiy tashxislashning yangi usullari"
+                               required>
+                        <div class="form-text">Sarlavha 1–100 belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
                     <!-- Summary -->
                     <div class="mb-3">
-                        <label for="summary" class="form-label">Annotatsiya</label>
+                        <label for="summary" class="form-label">Umumiy fikr (Abstract)</label>
                         <textarea name="abstract" class="form-control" id="summary" rows="4"
-                                  placeholder="Kamida 100 belgi yozing..." minlength="100"
+                                  minlength="100" maxlength="2000"
+                                  placeholder="Masalan: Ushbu tadqiqot sun’iy intellekt asosida tibbiy tasvirlar orqali kasalliklarni erta aniqlash samaradorligini baholaydi..."
                                   required>{{ paper.abstract }}</textarea>
-                        <div class="form-text">Annotatsiya kamida 100 ta belgidan iborat bo‘lishi kerak.</div>
+                        <div class="form-text">Umumiy fikr 100–2000 belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
                     <!-- Intro -->
                     <div class="mb-3">
-                        <label for="intro" class="form-label">Asosiy qism</label>
+                        <label for="intro" class="form-label">Kirish qism (Introduction)</label>
                         <textarea name="intro" class="form-control" id="intro" rows="5"
-                                  placeholder="Kirish qismi kamida 300 belgi bo‘lsin..."
-                                  minlength="300" required>{{ paper.intro }}</textarea>
-                        <div class="form-text">Asosiy qism kamida 300 ta belgidan iborat bo‘lishi kerak.</div>
+                                  minlength="100" maxlength="2000"
+                                  placeholder="Kirish qismi kamida 100 belgi bo‘lsin..."
+                                  required>{{ paper.intro }}</textarea>
+                        <div class="form-text">Kirish qismi 100–2000 ta belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
                     <!-- Citations -->
                     <div class="mb-3">
-                        <label for="citations" class="form-label">Sitatalar</label>
-                        <textarea name="citations" class="form-control" id="citations" rows="4"
-                                  placeholder="Sitatalarni kiriting..." required>{{ paper.citations }}</textarea>
-                        <div class="form-text">Sitatalar kamida 50 ta belgidan iborat bo‘lishi kerak.</div>
+                        <label for="citations" class="form-label">Foydalanilgan adabiyotlar</label>
+                        <textarea name="citations" id="citations" rows="5"
+                                  minlength="100" maxlength="2000"
+                                  class="form-control"
+                                  placeholder="1. Karimov, I. (2021). Axborot texnologiyalarining rivojlanishi. Toshkent: TDY."
+                                  required>{{ paper.citations }}</textarea>
+                        <div class="form-text">Foydalanilgan adabiyotlar 100–2000 belgidan iborat bo‘lsin.</div>
                     </div>
 
                     <!-- Keywords -->
                     <div class="mb-3">
-                        <label for="keywords" class="form-label">Kalit so‘zlar (3+ kalit so‘z tavsiya etiladi)</label>
-                        <input value="{{ paper.keywords }}" type="text" name="keywords" class="form-control"
-                               id="keywords"
+                        <label for="keywords" class="form-label">Kalit so‘zlar</label>
+                        <input type="text" name="keywords" class="form-control" id="keywords"
+                               value="{{ paper.keywords }}"
+                               minlength="10" maxlength="100"
                                placeholder="AI, Machine Learning, Dasturlash, Python"
-                               minlength="10" maxlength="300" required>
-                        <div class="form-text">Kalit so‘zlar 10–300 belgidan iborat bo‘lishi kerak.</div>
+                               required>
+                        <div class="form-text">Kalit so‘zlar 10–100 belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
                     <!-- Category -->
@@ -68,49 +74,45 @@
                         <label for="category" class="form-label">Kategoriya</label>
                         <select class="form-select" name="category" id="category" required>
                             {% for category in categories %}
-                                {% if category == paper.category %}
-                                    <option selected value="{{ category.name }}">{{ category.name }}</option>
-                                {% else %}
-                                    <option value="{{ category.name }}">{{ category.name }}</option>
-                                {% endif %}
+                                <option value="{{ category.name }}"
+                                        {% if category == paper.category %} selected {% endif %}>
+                                    {{ category.name }}
+                                </option>
                             {% endfor %}
                         </select>
                     </div>
 
                     <!-- Optional Organization -->
                     <div class="mb-3">
-                        <label for="organization" class="form-label">Muassasa va guruh nomi (ixtiyoriy)</label>
+                        <label for="organization" class="form-label">Tashkilot (ixtiyoriy)</label>
                         <input value="{{ paper.organization }}" type="text" name="organization" id="organization"
                                class="form-control"
-                               placeholder="Misol: Toshkent Davlat Universiteti"
-                               minlength="5" maxlength="120">
-                        <div class="form-text">Tashkilot nomi 5–120 belgidan iborat bo‘lishi kerak.</div>
-                    </div>
+                               minlength="1" maxlength="120"
+                               placeholder="Misol: Toshkent Davlat Universiteti">
+                        <div class="form-text">Tashkilot nomi 1–120 belgidan iborat bo‘lishi kerak.</div>
 
+                    </div>
 
                     <!-- PDF Upload -->
                     <div class="mb-4">
-                        <label for="file" class="form-label">WORD yuklash</label>
+                        <label for="file" class="form-label">Word fayl yuklash (ixtiyoriy)</label>
                         <input name="file" class="form-control" type="file" id="file" accept=".docx">
                         <div class="form-text">Faqat Word(.docx) fayllar qabul qilinadi.</div>
-                    </div>
 
-                    <!-- reCAPTCHA placeholder -->
-                    <div class="mb-4">
-                        <div class="captcha-box">[ reCAPTCHA Placeholder ]</div>
                     </div>
 
                     <!-- Agreement -->
                     <div class="form-check mb-4">
                         <input class="form-check-input" type="checkbox" id="agree" required>
                         <label class="form-check-label" for="agree">
-                            Men ushbu maqolaning original ekanligini tasdiqlayman va uni MURA’da nashr etishga roziman.
+                            Men ushbu maqolaning original ekanligini tasdiqlayman…
                         </label>
                     </div>
 
                     <div class="text-center">
-                        <button type="submit" class="btn btn-primary px-4 py-2">Maqolani joylashtirish</button>
+                        <button type="submit" class="btn btn-primary px-4 py-2">O‘zgartirishni saqlash</button>
                     </div>
+
                 </form>
             </div>
         </div>

@@ -86,12 +86,16 @@ class ProfileStatsView(LoginRequiredMixin, View):
         on_process_count = Paper.objects.filter(owner=user, status=2).count()
         declined_count = Paper.objects.filter(owner=user, status=3).count()
         accepted_count = Paper.objects.filter(owner=user, status=4).count()
+        payment_process_count = Paper.objects.filter(owner=user, status=5).count()
+        blocked_count = Paper.objects.filter(owner=user, status=6).count()
 
         context = {
             'draft_count': draft_count,
             'on_process_count': on_process_count,
             'declined_count': declined_count,
             'accepted_count': accepted_count,
+            'payment_process_count': payment_process_count,
+            'blocked_count': blocked_count,
         }
 
         return render(request, self.template_name, context)

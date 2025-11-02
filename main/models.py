@@ -38,17 +38,22 @@ class Paper(models.Model):
     category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)
 
     title = models.CharField(
-        max_length=200,
+        max_length=100,
         validators=[MinLengthValidator(1)],
         help_text="Sarlavha 1–100 belgidan iborat bo‘lishi kerak."
     )
 
     abstract = models.TextField(
+        max_length=2000,
         validators=[MinLengthValidator(100)],
-        help_text="Qisqacha mazmun kamida 100 ta belgidan iborat bo‘lishi kerak."
+        help_text="Umumiy fikr 100–2000 belgidan iborat bo‘lishi kerak."
     )
 
-    intro = models.TextField()
+    intro = models.TextField(
+        max_length=2000,
+        validators=[MinLengthValidator(100)],
+        help_text="Kirish qismi 100-2000 ta belgidan iborat bo‘lishi kerak."
+    )
 
     file = models.FileField(upload_to='pdfs/')
 
@@ -61,6 +66,7 @@ class Paper(models.Model):
     published_at = models.DateField(auto_now=True)
 
     keywords = models.CharField(
+        max_length=100,
         validators=[MinLengthValidator(10)],
         help_text="Kalit so‘zlar 10–300 belgidan iborat bo‘lishi kerak."
     )
@@ -68,7 +74,6 @@ class Paper(models.Model):
     pages = models.IntegerField(
         null=True,
         blank=True,
-        help_text="Betlar soni 3–50 oralig‘ida bo‘lishi kerak."
     )
 
     organization = models.CharField(
@@ -76,13 +81,18 @@ class Paper(models.Model):
         validators=[MinLengthValidator(1)],
         null=True,
         blank=True,
-        help_text="Tashkilot nomi 5–120 belgidan iborat bo‘lishi kerak."
+        help_text="Tashkilot nomi 1–120 belgidan iborat bo‘lishi kerak."
     )
     paid_at = models.DateTimeField(null=True, blank=True)
 
     reject_count = models.IntegerField(default=0)
 
-    citations = models.TextField(null=True)
+    citations = models.TextField(null=True,
+                                 blank=True,
+                                 max_length=2000,
+                                 validators=[MinLengthValidator(100)],
+                                 help_text="Foydalanilgan adabiyotlar 100–2000 belgidan iborat bo`lsin."
+                                 )
 
     certificate = models.FileField(null=True, blank=True)
 

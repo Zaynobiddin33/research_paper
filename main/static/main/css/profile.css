@@ -50,3 +50,11 @@ body {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
 }
+
+.stat-card.payment {
+    border-top: 4px solid #0ea5e9; /* sky blue */
+}
+
+.stat-card.blocked {
+    border-top: 4px solid #6b7280; /* gray */
+}
