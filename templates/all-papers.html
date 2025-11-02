@@ -65,7 +65,7 @@
                         <div class="card-body">
                             <h5 class="card-title fw-semibold">{{ paper.title }}</h5>
                             <p class="text-muted small mb-2">
-                                {{ paper.owner.first_name }} · {{ paper.published_at|date:"Y" }}
+                                {{ paper.owner.first_name }} {{ paper.owner.last_name }} · {{ paper.published_at|date:"Y" }}
                             </p>
                             <p>{{ paper.abstract|truncatewords:25 }}</p>
                             <a href="{% url 'detail_paper' paper.id %}"
