@@ -37,8 +37,8 @@
 
                     <!-- Intro -->
                     <div class="mb-3">
-                        <label for="editor" class="form-label">Asosiy Qism</label>
-                        <textarea name="intro" class="form-control" id="editor" rows="5"
+                        <label for="intro" class="form-label">Bu maqola nimani o‘rganadi?</label>
+                        <textarea name="intro" class="form-control" id="intro" rows="5"
                                   placeholder="Kirish qismi kamida 300 belgi bo‘lsin..."
                                   minlength="300" required>{{paper.intro}}</textarea>
                         <div class="form-text">Kirish qismi kamida 300 ta belgidan iborat bo‘lishi kerak.</div>
@@ -77,7 +77,7 @@
 
                     <!-- Optional Organization -->
                     <div class="mb-3">
-                        <label for="organization" class="form-label">Muassasa va guruh nomi (ixtiyoriy)</label>
+                        <label for="organization" class="form-label">Tashkilot (ixtiyoriy)</label>
                         <input value="{{paper.organization}}" type="text" name="organization" id="organization" class="form-control"
                                placeholder="Misol: Toshkent Davlat Universiteti"
                                minlength="5" maxlength="120">
@@ -88,9 +88,9 @@
 
                     <!-- PDF Upload -->
                     <div class="mb-4">
-                        <label for="file" class="form-label">PDF yuklash</label>
-                        <input name="file" class="form-control" type="file" id="file" accept=".pdf">
-                        <div class="form-text">Faqat PDF fayllar qabul qilinadi.</div>
+                        <label for="file" class="form-label">WORD yuklash</label>
+                        <input name="file" class="form-control" type="file" id="file" accept=".docx">
+                        <div class="form-text">Faqat Word(.docx) fayllar qabul qilinadi.</div>
                     </div>
 
                     <!-- reCAPTCHA placeholder -->
@@ -113,36 +113,4 @@
             </div>
         </div>
     </section>
-
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
-<script>
-ClassicEditor
-.create(document.querySelector('#editor'), {
-    simpleUpload: {
-        uploadUrl: '/upload/',  // your backend endpoint
-        headers: {
-            'X-CSRFToken': '{{ csrf_token }}'
-        }
-    }
-})
-.then(editor => {
-    console.log('Editor ready', editor);
-})
-.catch(error => console.error(error));
-</script>
-
-<script>
-ClassicEditor
-  .create(document.querySelector('#citations'), {
-    toolbar: ['numberedList', 'bulletedList', '|', 'undo', 'redo']
-  })
-  .then(editor => {
-    // 🪄 Automatically enable numbered list mode
-    editor.execute('numberedList');
-
-    // Optionally focus immediately
-    editor.editing.view.focus();
-  })
-  .catch(console.error);
-</script>
 {% endblock %}

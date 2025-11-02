@@ -38,18 +38,17 @@ class Paper(models.Model):
     category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)
 
     title = models.CharField(
-        max_length=100,
+        max_length=200,
         validators=[MinLengthValidator(1)],
         help_text="Sarlavha 10–255 belgidan iborat bo‘lishi kerak."
     )
 
     abstract = models.TextField(
-        max_length=500,
         validators=[MinLengthValidator(100)],
         help_text="Qisqacha mazmun kamida 100 ta belgidan iborat bo‘lishi kerak."
     )
 
-    intro = RichTextUploadingField()
+    intro = models.TextField()
 
     file = models.FileField(upload_to='pdfs/')
 
@@ -62,7 +61,6 @@ class Paper(models.Model):
     published_at = models.DateField(auto_now=True)
 
     keywords = models.CharField(
-        max_length=100,
         validators=[MinLengthValidator(10)],
         help_text="Kalit so‘zlar 10–300 belgidan iborat bo‘lishi kerak."
     )

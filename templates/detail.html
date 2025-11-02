@@ -34,7 +34,7 @@
 
                 <!-- Abstract -->
                 <div class="mb-3">
-                    <h3 class="mb-2" style="font-size:1.05rem; font-weight:700;">Hulosa</h3>
+                    <h3 class="mb-2" style="font-size:1.05rem; font-weight:700;">Annotatsiya</h3>
                     <p class="paper-content" style="margin-top:6px;">
                         {{ paper.abstract }}
                     </p>
@@ -44,14 +44,14 @@
 
                 <!-- Full text / sections preview -->
                 <div class="mt-4">
-                    <h3 style="font-size:1.02rem; font-weight:700; margin-bottom:10px;">Kirish</h3>
+                    <h3 style="font-size:1.02rem; font-weight:700; margin-bottom:10px;">Asosiy qism</h3>
                     <p class="paper-content">
-                        {{ paper.intro | safe }}
+                        {{ paper.intro }}
                     </p>
 
                     <h4 style="font-size:1rem; font-weight:700; margin-top:18px;">Foydalanilgan adabiyotlar</h4>
                     <ol style="line-height:1.6; margin-top:8px; color:#333">
-                        <li>{{ paper.citations | safe }}</li>
+                        <li>{{ paper.citations }}</li>
                     </ol>
                 </div>
 

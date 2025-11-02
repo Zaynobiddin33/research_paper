@@ -42,13 +42,13 @@
 
             <h4 class="fw-semibold mb-3">Kirish</h4>
             <p class="text-muted mb-4">
-                {{ paper.intro | safe }}
+                {{ paper.intro }}
             </p>
 
 
             <h4 class="fw-semibold mb-3">Foydalanilgan adabiyotlar</h4>
             <p class="text-muted mb-4">
-                {{ paper.citations | safe }}
+                {{ paper.citations }}
             </p>
 
         <h4 class="fw-semibold mb-3">Kalit so'zlar</h4>
@@ -65,7 +65,7 @@
             {% if paper.status == 1 or paper.status == 3%}
                 <a href="{% url 'edit_paper' paper.id %}" class="btn btn-edit">Maqolani tahrirlash</a>
                 <button type="button" class="btn btn-edit" data-bs-toggle="modal" data-bs-target="#resubmitModal">
-                Qayta yuborish
+                Qayta yuborish {{paper.reject_count}}/5
                 </button>
             {% else %}
                 <button class="btn btn-edit" disabled>Maqolani tahrirlash</button>
@@ -133,7 +133,7 @@
       <div class="modal-body">
         <p class="mb-3">
           Siz haqiqatan ham ushbu maqolani qayta yubormoqchimisiz?  
-          <strong>Bitta maqola eng ko‘pi bilan 5 marta</strong> tekshiruvga yuborilishi mumkin.
+          <strong>Bitta maqola eng ko‘pi bilan 5 marta</strong> tekshiruvga yuborilishi mumkin. Siz {{paper.reject_count}} marta tekshirtirgansiz.
         </p>
         <p class="text-danger fw-semibold mb-0">
           5 ta urinishdan keyin maqola <strong>bloklanadi</strong> va qayta yuborish mumkin bo‘lmaydi.

@@ -21,6 +21,9 @@ from django.db.models.functions import Concat
 from django.db.models import F, Value
 from django.utils import timezone
 from .pdf_edit import give_certificate
+from .wordify import *
+from .convert import *
+from django.conf import settings
 
 
 class RegisterView(View):
@@ -146,8 +149,7 @@ class UploadPaperView(LoginRequiredMixin, View):
         data = request.POST
         file = request.FILES['file']
         category = Category.objects.get(name=data['category'])
-        pdf = PdfReader(file)
-        pages = len(pdf.pages)
+        pages = 1
 
         Paper.objects.create(
             owner=request.user,
@@ -310,15 +312,54 @@ def admin_paper_detail(request, id):
 
 @login_required(redirect_field_name='login')
 def accept_paper(request, id):
-    if request.user.is_superuser:
-        paper = models.Paper.objects.get(id = id)
-        paper.status = 4
-        certificate = give_certificate(paper.owner.first_name, paper.owner.last_name, paper.title, f'http://127.0.0.1:8000/detail-paper/{paper.id}')
-        paper.certificate = certificate
-        paper.save()
-        return redirect('admin_waitlist')
-    else:
+    if not request.user.is_superuser:
         return redirect('main')
+
+    paper = models.Paper.objects.get(id=id)
+    paper.status = 4
+
+    # Generate the certificate
+    certificate = give_certificate(
+        paper.owner.first_name,
+        paper.owner.last_name,
+        paper.title,
+        f'http://127.0.0.1:8000/detail-paper/{paper.id}'
+    )
+    paper.certificate = certificate
+
+    # Fill the Word template with paper info
+    filled_template_path = f"word_templates/{paper.owner.first_name}-{paper.owner.last_name}.docx"
+    template = fill_template(
+        'temp.docx',
+        {
+            "publisher_name": f"{paper.owner.first_name} {paper.owner.last_name}",
+            "num_years": str(datetime.now().year - 2024),
+            "num_month": str(datetime.now().month),
+            "current_year": str(datetime.now().year),
+            "submitted_time": paper.published_at.strftime('%d/%m/%y'),
+            "accepted_time": datetime.now().strftime('%d/%m/%y'),
+            "published_time": datetime.now().strftime('%d/%m/%y'),
+            "licence_url": f"http://127.0.0.1:8000/detail-paper/{paper.id}",
+        },
+        filled_template_path
+    )
+
+    # Combine the filled template and the existing paper
+    combined_docx = add_template(template, paper.file.path, f"combined/{paper.owner.first_name}-{paper.owner.last_name}.docx")
+
+    # Convert to PDF (works on Linux/macOS)
+    pdf_path = f"pdfs/{paper.owner.first_name}-{paper.owner.last_name}.pdf"
+    convert_to_pdf(combined_docx, f"media/{pdf_path}")
+    reader = PdfReader(f"media/{pdf_path}")
+    length = len(reader.pages)
+
+    # Save the final PDF path to the paper model
+    paper.file.name = pdf_path
+    paper.pages = length
+    paper.save()
+
+    print(f"✅ Paper '{paper.title}' accepted and converted to PDF.")
+    return redirect('admin_waitlist')
 
 @login_required(redirect_field_name='login')
 def deny_paper(request, id):
@@ -411,9 +452,7 @@ def edit_paper(request, id):
             file = request.FILES.get('file')
             category = Category.objects.get(name=data['category'])
             if file:
-                pdf = PdfReader(file)
-                paper.file = file
-                paper.pages = len(pdf.pages)
+                paper.pages = 1
 
             paper.title = data['title']
             paper.abstract = data['abstract']
@@ -422,7 +461,10 @@ def edit_paper(request, id):
             paper.keywords = data['keywords']
             paper.organization = data['organization']
             paper.citations = data['citations']
-            paper.status = 1
+            if paper.status == 3:
+                paper.status = 2
+            else:
+                paper.status = 1
 
             paper.save()
             return redirect('my_paper', paper.id)

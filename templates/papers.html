@@ -35,7 +35,7 @@
 
                             <h5 class="card-title mt-2" style="min-height: 50px;">{{ paper.title|truncatewords:6 }}</h5>
                             <p class="text-muted small mb-2">Yuklangan: {{ paper.published_at }}</p>
-                            <p>{{ paper.intro|truncatewords:20 |safe}}</p>
+                            <p style="min-height: 90px;">{{ paper.intro|truncatewords:20}}</p>
                             <a href="{% url 'my_paper' paper.id %}" class="text-primary fw-semibold">Batafsil ko'rish
                                 →</a>
                             {% if paper.status == 1 %}
