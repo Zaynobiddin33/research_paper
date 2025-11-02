@@ -1,5 +1,7 @@
 acres==0.5.0
+appscript==1.4.0
 asgiref==3.10.0
+babel==2.17.0
 certifi==2025.10.5
 charset-normalizer==3.4.4
 ci-info==0.3.0
@@ -10,6 +12,8 @@ Django==5.2.7
 django-ckeditor==6.7.3
 django-jazzmin==3.0.1
 django-js-asset==3.1.2
+docx2pdf==0.1.8
+docxcompose==1.4.0
 etelemetry==0.3.1
 filelock==3.20.0
 httplib2==0.31.0
@@ -39,9 +43,11 @@ qrcode==8.2
 rdflib==7.4.0
 requests==2.32.5
 scipy==1.16.3
+setuptools==80.9.0
 simplejson==3.20.2
 six==1.17.0
 sqlparse==0.5.3
+tqdm==4.67.1
 traits==7.0.2
 typing_extensions==4.15.0
 tzdata==2025.2
