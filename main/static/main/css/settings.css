@@ -90,6 +90,15 @@ body {
     transform: translateY(-2px);
 }
 
+.avatar-preview {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #007bff;
+    margin-bottom: 15px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .settings-container {

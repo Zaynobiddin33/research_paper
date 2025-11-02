@@ -9,7 +9,6 @@
 {% endblock %}
 
 {% block content %}
-    <!-- Upload Section -->
     <section class="upload-section">
         <div class="container">
             <div class="upload-box">
@@ -22,33 +21,40 @@
                     <div class="mb-3">
                         <label for="title" class="form-label">Sarlavha</label>
                         <input name="title" type="text" class="form-control" id="title"
-                               placeholder="Sarlavha (1–100 belgidan iborat bo‘lsin)"
-                               minlength="1" maxlength="100" required>
+                               minlength="1" maxlength="100"
+                               placeholder="Masalan: Sun’iy intellekt orqali tibbiy tashxislashning yangi usullari"
+                               required>
                         <div class="form-text">Sarlavha 1–100 belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
                     <!-- Summary -->
                     <div class="mb-3">
-                        <label for="summary" class="form-label">Annotatsiya</label>
+                        <label for="summary" class="form-label">Umumiy fikr (Abstract)</label>
                         <textarea name="abstract" class="form-control" id="summary" rows="4"
-                                  placeholder="Kamida 100 belgi yozing..." minlength="100" maxlength="500"
+                                  minlength="100" maxlength="500"
+                                  placeholder="Masalan: Ushbu tadqiqot sun’iy intellekt asosida tibbiy tasvirlar orqali kasalliklarni erta aniqlash samaradorligini baholaydi..."
                                   required></textarea>
-                        <div class="form-text">Hulosa kamida 100 ta belgidan iborat bo‘lishi kerak.</div>
+                        <div class="form-text">Umumiy fikr 100–500 belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
-                    <!-- Intro -->
+                    <!-- Intro with CKEditor -->
                     <div class="mb-3">
                         <label for="intro" class="form-label">Bu maqola nimani o‘rganadi?</label>
                         <textarea name="intro" class="form-control" id="intro" rows="5"
                                   placeholder="Kirish qismi kamida 100 belgi bo‘lsin..."
                                   minlength="100" maxlength="500" required></textarea>
                         <div class="form-text">Kirish qismi kamida 100 ta belgidan iborat bo‘lishi kerak.</div>
+                        <label for="editor" class="form-label">Kirish qism</label>
+                        <textarea name="intro" class="form-control" id="editor" rows="3"
+                                  minlength="100" maxlength="500"
+                                  placeholder="Masalan: So‘nggi yillarda raqamli texnologiyalar ta’lim jarayoniga sezilarli ta’sir ko‘rsatmoqda..."
+                                  required></textarea>
+                        <div class="form-text">Kirish qismi 100–500 belgidan iborat bo‘lishi kerak.</div>
                     </div>
-
 
                     <!-- Keywords -->
                     <div class="mb-3">
-                        <label for="keywords" class="form-label">Kalit so‘zlar (3+ kalit so‘z tavsiya etiladi)</label>
+                        <label for="keywords" class="form-label">Kalit so‘zlar</label>
                         <input type="text" name="keywords" class="form-control" id="keywords"
                                placeholder="AI, Machine Learning, Dasturlash, Python"
                                minlength="10" maxlength="100" required>
@@ -71,22 +77,24 @@
                         <input type="text" name="organization" id="organization" class="form-control"
                                placeholder="Misol: Toshkent Davlat Universiteti"
                                minlength="1" maxlength="120">
-                        <div class="form-text">Tashkilot nomi 1–120 belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
-                    <!-- Citations -->
+                    <!-- Citations with CKEditor -->
                     <div class="mb-3">
                         <label for="citations" class="form-label">Foydalanilgan adabiyotlar</label>
-                        <textarea name="citations" class="form-control" id="citations" rows="5"
-                                  placeholder="Kirish qismi kamida 100 belgi bo‘lsin..." required></textarea>
+                        <textarea name="citations" id="citations" rows="5"
+                                  minlength="100" maxlength="2000"
+                                  class="form-control"
+                                  placeholder="1. Karimov, I. (2021). Axborot texnologiyalarining rivojlanishi. Toshkent: TDY."
+                                  required></textarea>
+                        <div class="form-text">100–2000 belgi.</div>
                     </div>
-
 
                     <!-- PDF Upload -->
                     <div class="mb-4">
-                        <label for="file" class="form-label">WORD fayl yuklash</label>
-                        <input name="file" class="form-control" type="file" id="file" accept=".docx" required>
-                        <div class="form-text">Faqat word(.docx) fayllar qabul qilinadi.</div>
+                        <label for="file" class="form-label">PDF yuklash</label>
+                        <input name="file" class="form-control" type="file" id="file" accept=".pdf" required>
+                        <div class="form-text">Faqat PDF fayllar qabul qilinadi.</div>
                     </div>
 
                     <!-- reCAPTCHA placeholder -->
@@ -98,13 +106,14 @@
                     <div class="form-check mb-4">
                         <input class="form-check-input" type="checkbox" id="agree" required>
                         <label class="form-check-label" for="agree">
-                            Men ushbu maqolaning original ekanligini tasdiqlayman va uni MURA’da nashr etishga roziman.
+                            Men ushbu maqolaning original ekanligini tasdiqlayman…
                         </label>
                     </div>
 
                     <div class="text-center">
                         <button type="submit" class="btn btn-primary px-4 py-2">Maqolani joylashtirish</button>
                     </div>
+
                 </form>
             </div>
         </div>

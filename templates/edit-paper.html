@@ -21,7 +21,7 @@
                     <!-- Title -->
                     <div class="mb-3">
                         <label for="title" class="form-label">Sarlavha</label>
-                        <input value="{{paper.title}}" name="title" type="text" class="form-control" id="title"
+                        <input value="{{ paper.title }}" name="title" type="text" class="form-control" id="title"
                                placeholder="Sarlavha (10–255 belgidan iborat bo‘lsin)"
                                minlength="10" maxlength="255" required>
                         <div class="form-text">Sarlavha 10–255 belgidan iborat bo‘lishi kerak.</div>
@@ -29,9 +29,10 @@
 
                     <!-- Summary -->
                     <div class="mb-3">
-                        <label for="summary" class="form-label">Annotatsiya</label>
+                        <label for="summary" class="form-label">Umumiy fikr (Abstract)</label>
                         <textarea name="abstract" class="form-control" id="summary" rows="4"
-                                  placeholder="Kamida 100 belgi yozing..." minlength="100" required>{{paper.abstract}}</textarea>
+                                  placeholder="Kamida 100 belgi yozing..." minlength="100"
+                                  required>{{ paper.abstract }}</textarea>
                         <div class="form-text">Hulosa kamida 100 ta belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
@@ -40,7 +41,7 @@
                         <label for="intro" class="form-label">Bu maqola nimani o‘rganadi?</label>
                         <textarea name="intro" class="form-control" id="intro" rows="5"
                                   placeholder="Kirish qismi kamida 300 belgi bo‘lsin..."
-                                  minlength="300" required>{{paper.intro}}</textarea>
+                                  minlength="300" required>{{ paper.intro }}</textarea>
                         <div class="form-text">Kirish qismi kamida 300 ta belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
@@ -48,14 +49,15 @@
                     <div class="mb-3">
                         <label for="citations" class="form-label">Sitatalar</label>
                         <textarea name="citations" class="form-control" id="citations" rows="4"
-                                  placeholder="Sitatalarni kiriting..." required>{{paper.citations}}</textarea>
+                                  placeholder="Sitatalarni kiriting..." required>{{ paper.citations }}</textarea>
                         <div class="form-text">Sitatalar kamida 50 ta belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
                     <!-- Keywords -->
                     <div class="mb-3">
                         <label for="keywords" class="form-label">Kalit so‘zlar (3+ kalit so‘z tavsiya etiladi)</label>
-                        <input value="{{paper.keywords}}" type="text" name="keywords" class="form-control" id="keywords"
+                        <input value="{{ paper.keywords }}" type="text" name="keywords" class="form-control"
+                               id="keywords"
                                placeholder="AI, Machine Learning, Dasturlash, Python"
                                minlength="10" maxlength="300" required>
                         <div class="form-text">Kalit so‘zlar 10–300 belgidan iborat bo‘lishi kerak.</div>
@@ -66,24 +68,24 @@
                         <label for="category" class="form-label">Kategoriya</label>
                         <select class="form-select" name="category" id="category" required>
                             {% for category in categories %}
-                                {%if category == paper.category%}
-                                <option selected value="{{ category.name }}">{{ category.name }}</option>
-                                {%else%}
-                                <option value="{{ category.name }}">{{ category.name }}</option>
-                                {%endif%}
+                                {% if category == paper.category %}
+                                    <option selected value="{{ category.name }}">{{ category.name }}</option>
+                                {% else %}
+                                    <option value="{{ category.name }}">{{ category.name }}</option>
+                                {% endif %}
                             {% endfor %}
                         </select>
                     </div>
 
                     <!-- Optional Organization -->
                     <div class="mb-3">
-                        <label for="organization" class="form-label">Tashkilot (ixtiyoriy)</label>
-                        <input value="{{paper.organization}}" type="text" name="organization" id="organization" class="form-control"
+                        <label for="organization" class="form-label">Muassasa va guruh nomi (ixtiyoriy)</label>
+                        <input value="{{ paper.organization }}" type="text" name="organization" id="organization"
+                               class="form-control"
                                placeholder="Misol: Toshkent Davlat Universiteti"
                                minlength="5" maxlength="120">
                         <div class="form-text">Tashkilot nomi 5–120 belgidan iborat bo‘lishi kerak.</div>
                     </div>
-
 
 
                     <!-- PDF Upload -->

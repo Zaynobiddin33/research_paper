@@ -59,12 +59,12 @@
                 <div class="d-flex flex-wrap gap-2 align-items-center mt-4">
 
                     <button class="small-btn" data-bs-toggle="modal" data-bs-target="#rejectModal">
-                    Rad etish
+                        Rad etish
                     </button>
 
                     <!-- Accept Button -->
                     <button class="download-btn" data-bs-toggle="modal" data-bs-target="#acceptModal">
-                    Qabul qilish
+                        Qabul qilish
                     </button>
                 </div>
             </article>
@@ -83,6 +83,7 @@
                                  style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:1px solid #ddd;">
                         {% else %}
                             <img id="avatarPreview" src='https://placehold.co/800x600?text=
+
 
 
 
@@ -142,46 +143,48 @@
     <!-- Citation Modal -->
 
     <!-- Modal -->
-<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form method="post" action="{%url 'deny_paper' paper.id %}">
-        {% csrf_token %}
-        <div class="modal-header">
-          <h5 class="modal-title" id="rejectModalLabel">Maqolani rad etish</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" action="{% url 'deny_paper' paper.id %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="rejectModalLabel">Maqolani rad etish</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h6>Kommentariya yozing. Nega maqolani rad qildingiz?</h6>
+                        <textarea name="comment" class="form-control" rows="4" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Ortga
+                        </button>
+                        <button type="submit" class="btn btn-primary rounded-pill">Yuborish</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="modal-body">
-          <h6>Kommentariya yozing. Nega maqolani rad qildingiz?</h6>
-          <textarea name="comment" class="form-control" rows="4" required></textarea>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Ortga</button>
-          <button type="submit" class="btn btn-primary rounded-pill">Yuborish</button>
-        </div>
-      </form>
     </div>
-  </div>
-</div>
 
-<!-- ACCEPT MODAL -->
-<div class="modal fade" id="acceptModal" tabindex="-1" aria-labelledby="acceptModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="acceptModalLabel">Maqolani qabul qilish</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <h6>Bu maqolani tasdiqlganingizdan so'ng bu harakatni bekor qilib bo'lmaydi. Tasdiqlashga ishonchingiz komilmi?</h6>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Ortga</button>
-          <a href="{%url 'accept_paper' paper.id%}" class="btn btn-primary rounded-pill">Tasdiqlash</a>
+    <!-- ACCEPT MODAL -->
+    <div class="modal fade" id="acceptModal" tabindex="-1" aria-labelledby="acceptModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="acceptModalLabel">Maqolani qabul qilish</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Bu maqolani tasdiqlganingizdan so'ng bu harakatni bekor qilib bo'lmaydi. Tasdiqlashga
+                        ishonchingiz komilmi?</h6>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Ortga</button>
+                    <a href="{% url 'accept_paper' paper.id %}" class="btn btn-primary rounded-pill">Tasdiqlash</a>
+                </div>
+            </div>
         </div>
     </div>
-  </div>
-</div>
 
     <!-- Bootstrap JS (if not already included) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

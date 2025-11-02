@@ -1,0 +1,123 @@
+/* ========== Hero Section ========== */
+.hero {
+    background: linear-gradient(120deg, rgba(0, 0, 0, 0.65), rgba(30, 30, 30, 0.65)),
+    url("https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80") center/cover no-repeat;
+    color: #fff;
+    text-align: center;
+    padding: 100px 20px;
+    border-radius: 0 0 20px 20px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #ffffff;
+}
+
+.hero p {
+    max-width: 750px;
+    margin: 20px auto 0;
+    color: #e8e8e8;
+    font-size: 1.1rem;
+}
+
+/* ========== Creators Section ========== */
+.creators-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    margin-top: 60px;
+}
+
+.creator-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 22px;
+    text-align: center;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.09);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+}
+
+.creator-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18);
+}
+
+/* Gradient Border */
+.creator-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(135deg, #007bff, #00d4ff);
+    mask: linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+.creator-img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #007bff;
+    margin-bottom: 15px;
+}
+
+.creator-role {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #007bff;
+    margin-bottom: 10px;
+}
+
+.creator-desc {
+    font-size: 0.95rem;
+    color: #4a4a4a;
+    line-height: 1.45;
+    margin-bottom: 18px;
+}
+
+/* ========== Social Links ========== */
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-links a {
+    font-size: 1.35rem;
+    color: #444;
+    transition: 0.25s ease;
+}
+
+.social-links a:hover {
+    transform: translateY(-2px);
+}
+
+.social-links a.github:hover {
+    color: #171515;
+}
+
+.social-links a.linkedin:hover {
+    color: #0077b5;
+}
+
+.social-links a.telegram:hover {
+    color: #0088cc;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 600px) {
+    .hero h1 {
+        font-size: 2.3rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+}

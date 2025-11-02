@@ -2,100 +2,27 @@
 {% load static %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'main/css/papers.css' %}">
-<style>
-    body {
-        background-color: #f8fafc;
-        font-family: 'Inter', sans-serif;
-    }
+    <link rel="stylesheet" href="{% static 'main/css/papers.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/successful-payment.css' %}">
 
-    .payment-success {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 85vh;
-        padding-top: 80px;
-    }
-
-    .success-card {
-        background: #ffffff;
-        border-radius: 18px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
-        padding: 60px 45px;
-        text-align: center;
-        max-width: 520px;
-        width: 100%;
-        transition: all 0.3s ease;
-    }
-
-    .success-icon {
-        width: 85px;
-        height: 85px;
-        border-radius: 50%;
-        background: rgba(52, 211, 153, 0.1);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 25px;
-    }
-
-    .success-icon svg {
-        color: #10b981;
-        width: 45px;
-        height: 45px;
-    }
-
-    .success-title {
-        font-size: 1.9rem;
-        font-weight: 700;
-        color: #111827;
-        margin-bottom: 12px;
-    }
-
-    .success-text {
-        color: #4b5563;
-        font-size: 1.05rem;
-        margin-bottom: 35px;
-        line-height: 1.7;
-    }
-
-    .btn-back {
-        background-color: #2563eb;
-        color: #fff;
-        border: none;
-        border-radius: 12px;
-        padding: 12px 36px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: all 0.2s ease-in-out;
-    }
-
-    .btn-back:hover {
-        background-color: #1e40af;
-        transform: translateY(-2px);
-    }
-
-    footer {
-        margin-top: 50px;
-    }
-</style>
 {% endblock %}
 
 {% block content %}
-<section class="payment-success">
-    <div class="success-card">
-        <div class="success-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-            </svg>
+    <section class="payment-success">
+        <div class="success-card">
+            <div class="success-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2"
+                     stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+                </svg>
+            </div>
+
+            <h1 class="success-title">Chekingiz qabul qilindi</h1>
+            <p class="success-text">
+                Admin to‘lovni tekshiradi va maqolangizni tez orada yuklaydi.<br>
+            </p>
+
+            <a href="{% url 'main' %}" class="btn-back">Bosh sahifaga qaytish</a>
         </div>
-
-        <h1 class="success-title">Chekingiz qabul qilindi</h1>
-        <p class="success-text">
-            Admin to‘lovni tekshiradi va maqolangizni tez orada yuklaydi.<br>
-        </p>
-
-        <a href="{% url 'main' %}" class="btn-back">Bosh sahifaga qaytish</a>
-    </div>
-</section>
+    </section>
 {% endblock %}

@@ -17,7 +17,7 @@ class Category(models.Model):
 
 
 class CustomUser(AbstractUser):
-    avatar = models.ImageField(upload_to='media/avatars/', null=True, blank=True)
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     status = models.IntegerField(default=0)
 
     def __str__(self):
@@ -40,7 +40,7 @@ class Paper(models.Model):
     title = models.CharField(
         max_length=200,
         validators=[MinLengthValidator(1)],
-        help_text="Sarlavha 10–255 belgidan iborat bo‘lishi kerak."
+        help_text="Sarlavha 1–100 belgidan iborat bo‘lishi kerak."
     )
 
     abstract = models.TextField(

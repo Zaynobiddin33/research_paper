@@ -65,13 +65,14 @@
                         </svg>
                         PDF'ni yuklash
                     </a>
-                    <a class="download-btn" href="{{ paper.certificate.url }}" download="{{ paper.owner.first_name }}-{{paper.owner.last_name}}.pptx"
+                    <a class="download-btn" href="{{ paper.certificate.url }}"
+                       download="{{ paper.owner.first_name }}-{{ paper.owner.last_name }}.pptx"
                        aria-label="Download paper PDF">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                              style="flex-shrink:0" viewBox="0 0 16 16" aria-hidden="true">
                             <path d="M.5 9.9a.5.5 0 0 1 .5-.5h3.5V1.5a.5.5 0 0 1 1 0v7.9h3.5a.5.5 0 0 1 .35.85l-4 4a.5.5 0 0 1-.7 0l-4-4A.5.5 0 0 1 .5 9.9z"/>
                         </svg>
-                         Sertifikatni yuklash
+                        Sertifikatni yuklash
                     </a>
                     <button class="small-btn" data-bs-toggle="modal" data-bs-target="#citeModal">Sitata olish</button>
                 </div>
@@ -91,11 +92,6 @@
                                  style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:1px solid #ddd;">
                         {% else %}
                             <img id="avatarPreview" src='https://placehold.co/800x600?text=
-
-
-
-
-
                                     {{ paper.owner.first_name|default:"?"|slice:":1"|upper }}{{ paper.owner.last_name|default:"?"|slice:":1"|upper }}'
                                  alt="{{ paper.owner.first_name }} {{ paper.owner.last_name }}"
                                  style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:1px solid #ddd;">
