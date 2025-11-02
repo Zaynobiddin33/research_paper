@@ -113,8 +113,14 @@ class Comment(models.Model):
     comment = models.TextField()
     written_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.paper.title
+
 class Payment(models.Model):
     check_image = models.ImageField(upload_to='checks/')
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE)
     status = models.IntegerField(choices=[(1, 'sent'), (2, 'approved'), (3, 'denied')], default=1)
     paid_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.paper.title
