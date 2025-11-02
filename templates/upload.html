@@ -29,7 +29,7 @@
 
                     <!-- Summary -->
                     <div class="mb-3">
-                        <label for="summary" class="form-label">Umumiy fikr (Abstract)</label>
+                        <label for="summary" class="form-label">Annotatsiya</label>
                         <textarea name="abstract" class="form-control" id="summary" rows="4"
                                   minlength="100" maxlength="500"
                                   placeholder="Masalan: Ushbu tadqiqot sun’iy intellekt asosida tibbiy tasvirlar orqali kasalliklarni erta aniqlash samaradorligini baholaydi..."
@@ -39,17 +39,12 @@
 
                     <!-- Intro with CKEditor -->
                     <div class="mb-3">
-                        <label for="intro" class="form-label">Bu maqola nimani o‘rganadi?</label>
+                        <label for="intro" class="form-label">Asosiy qism</label>
                         <textarea name="intro" class="form-control" id="intro" rows="5"
                                   placeholder="Kirish qismi kamida 100 belgi bo‘lsin..."
                                   minlength="100" maxlength="500" required></textarea>
                         <div class="form-text">Kirish qismi kamida 100 ta belgidan iborat bo‘lishi kerak.</div>
-                        <label for="editor" class="form-label">Kirish qism</label>
-                        <textarea name="intro" class="form-control" id="editor" rows="3"
-                                  minlength="100" maxlength="500"
-                                  placeholder="Masalan: So‘nggi yillarda raqamli texnologiyalar ta’lim jarayoniga sezilarli ta’sir ko‘rsatmoqda..."
-                                  required></textarea>
-                        <div class="form-text">Kirish qismi 100–500 belgidan iborat bo‘lishi kerak.</div>
+                        
                     </div>
 
                     <!-- Keywords -->
@@ -92,9 +87,9 @@
 
                     <!-- PDF Upload -->
                     <div class="mb-4">
-                        <label for="file" class="form-label">PDF yuklash</label>
-                        <input name="file" class="form-control" type="file" id="file" accept=".pdf" required>
-                        <div class="form-text">Faqat PDF fayllar qabul qilinadi.</div>
+                        <label for="file" class="form-label">Word fayl yuklash</label>
+                        <input name="file" class="form-control" type="file" id="file" accept=".docx" required>
+                        <div class="form-text">Faqat word fayllar qabul qilinadi.</div>
                     </div>
 
                     <!-- reCAPTCHA placeholder -->

@@ -21,7 +21,7 @@
         <header class="paper-header">
             <h1 class="paper-title">{{ paper.title }}</h1>
             <p class="paper-meta">{{ paper.owner.first_name }} {{ paper.owner.last_name }} · {{ paper.organization }} ·
-                Yuklangan {{ paper.published_at }} · {{ paper.pages }} sahifa · <span class="text-muted">Estimated read: 12 min</span>
+                Yuklangan {{ paper.published_at }} · {{ paper.pages }} sahifa 
             </p>
         </header>
 
@@ -51,7 +51,7 @@
 
                     <h4 style="font-size:1rem; font-weight:700; margin-top:18px;">Foydalanilgan adabiyotlar</h4>
                     <ol style="line-height:1.6; margin-top:8px; color:#333">
-                        <li>{{ paper.citations }}</li>
+                        {{ paper.citations }}
                     </ol>
                 </div>
 

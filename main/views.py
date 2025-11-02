@@ -354,7 +354,7 @@ def accept_paper(request, id):
     combined_docx = add_template(template, paper.file.path, f"combined/{paper.owner.first_name}-{paper.owner.last_name}.docx")
 
     # Convert to PDF (works on Linux/macOS)
-    pdf_path = f"pdfs/{paper.owner.first_name}-{paper.owner.last_name}.pdf"
+    pdf_path = f"pdfs/{paper.owner.first_name}-{paper.owner.last_name}-{datetime.now()}.pdf"
     convert_to_pdf(combined_docx, f"media/{pdf_path}")
     reader = PdfReader(f"media/{pdf_path}")
     length = len(reader.pages)
