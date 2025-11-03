@@ -1,16 +1,17 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block head %}
+{% block style %}
     <link rel="stylesheet" href="{% static 'main/css/all_papers.css' %}">
+        <link rel="stylesheet" href="{% static 'main/css/base.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 {% endblock %}
 
 {% block content %}
     <!-- Hero Section -->
     <section
             class="hero position-relative text-white text-center d-flex align-items-center justify-content-center"
-            style="background: url('https://unsplash.com/photos/ivXK5MLcb2Y/download?force=true') center center/cover no-repeat;"
-    >
+            style="background: url('https://unsplash.com/photos/ivXK5MLcb2Y/download?force=true') center center/cover no-repeat;">
         <div class="overlay"></div>
         <div class="container position-relative z-1">
             <h1 class="fw-bold mb-3 text-white">Tadqiqot maqolalarini o‘rganing</h1>

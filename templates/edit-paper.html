@@ -19,51 +19,44 @@
 
                     <!-- Title -->
                     <div class="mb-3">
-                        <label for="title" class="form-label">Sarlavha (Title)</label>
+                        <label for="title" class="form-label">Sarlavha</label>
                         <input value="{{ paper.title }}" name="title" type="text" class="form-control" id="title"
-                               minlength="1" maxlength="100"
-                               placeholder="Masalan: Sun’iy intellekt orqali tibbiy tashxislashning yangi usullari"
-                               required>
-                        <div class="form-text">Sarlavha 1–100 belgidan iborat bo‘lishi kerak.</div>
+                               placeholder="Sarlavha (10–255 belgidan iborat bo‘lsin)"
+                               minlength="10" maxlength="255" required>
+                        <div class="form-text">Sarlavha 10–255 belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
                     <!-- Summary -->
                     <div class="mb-3">
                         <label for="summary" class="form-label">Umumiy fikr (Abstract)</label>
                         <textarea name="abstract" class="form-control" id="summary" rows="4"
-                                  minlength="100" maxlength="2000"
-                                  placeholder="Masalan: Ushbu tadqiqot sun’iy intellekt asosida tibbiy tasvirlar orqali kasalliklarni erta aniqlash samaradorligini baholaydi..."
+                                  placeholder="Kamida 100 belgi yozing..." minlength="100"
                                   required>{{ paper.abstract }}</textarea>
-                        <div class="form-text">Umumiy fikr 100–2000 belgidan iborat bo‘lishi kerak.</div>
+                        <div class="form-text">Hulosa kamida 100 ta belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
                     <!-- Intro -->
                     <div class="mb-3">
-                        <label for="intro" class="form-label">Kirish qism (Introduction)</label>
-                        <textarea name="intro" class="form-control" id="intro" rows="5"
-                                  minlength="100" maxlength="2000"
-                                  placeholder="Kirish qismi kamida 100 belgi bo‘lsin..."
-                                  required>{{ paper.intro }}</textarea>
-                        <div class="form-text">Kirish qismi 100–2000 ta belgidan iborat bo‘lishi kerak.</div>
+                        <label for="editor" class="form-label">Kirish</label>
+                        <textarea name="intro" class="form-control" id="editor" rows="5"
+                                  placeholder="Kirish qismi kamida 300 belgi bo‘lsin..."
+                                  minlength="300" required>{{ paper.intro }}</textarea>
+                        <div class="form-text">Kirish qismi kamida 300 ta belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
                     <!-- Citations -->
                     <div class="mb-3">
-                        <label for="citations" class="form-label">Foydalanilgan adabiyotlar</label>
-                        <textarea name="citations" id="citations" rows="5"
-                                  minlength="100" maxlength="2000"
-                                  class="form-control"
-                                  placeholder="1. Karimov, I. (2021). Axborot texnologiyalarining rivojlanishi. Toshkent: TDY."
-                                  required>{{ paper.citations }}</textarea>
-                        <div class="form-text">Foydalanilgan adabiyotlar 100–2000 belgidan iborat bo‘lsin.</div>
+                        <label for="citations" class="form-label">Sitatalar</label>
+                        <textarea name="citations" class="form-control" id="citations" rows="4"
+                                  placeholder="Sitatalarni kiriting..." required>{{ paper.citations }}</textarea>
+                        <div class="form-text">Sitatalar kamida 50 ta belgidan iborat bo‘lishi kerak.</div>
                     </div>
 
                     <!-- Keywords -->
                     <div class="mb-3">
-                        <label for="keywords" class="form-label">Kalit so‘zlar</label>
-                        <input type="text" name="keywords" class="form-control" id="keywords"
-                               value="{{ paper.keywords }}"
-                               minlength="10" maxlength="100"
+                        <label for="keywords" class="form-label">Kalit so‘zlar (3+ kalit so‘z tavsiya etiladi)</label>
+                        <input value="{{ paper.keywords }}" type="text" name="keywords" class="form-control"
+                               id="keywords"
                                placeholder="AI, Machine Learning, Dasturlash, Python"
                                required>
                         <div class="form-text">Kalit so‘zlar 10–100 belgidan iborat bo‘lishi kerak.</div>
@@ -74,24 +67,25 @@
                         <label for="category" class="form-label">Kategoriya</label>
                         <select class="form-select" name="category" id="category" required>
                             {% for category in categories %}
-                                <option value="{{ category.name }}"
-                                        {% if category == paper.category %} selected {% endif %}>
-                                    {{ category.name }}
-                                </option>
+                                {% if category == paper.category %}
+                                    <option selected value="{{ category.name }}">{{ category.name }}</option>
+                                {% else %}
+                                    <option value="{{ category.name }}">{{ category.name }}</option>
+                                {% endif %}
                             {% endfor %}
                         </select>
                     </div>
 
                     <!-- Optional Organization -->
                     <div class="mb-3">
-                        <label for="organization" class="form-label">Tashkilot (ixtiyoriy)</label>
+                        <label for="organization" class="form-label">Muassasa va guruh nomi (ixtiyoriy)</label>
                         <input value="{{ paper.organization }}" type="text" name="organization" id="organization"
                                class="form-control"
-                               minlength="1" maxlength="120"
-                               placeholder="Misol: Toshkent Davlat Universiteti">
-                        <div class="form-text">Tashkilot nomi 1–120 belgidan iborat bo‘lishi kerak.</div>
-
+                               placeholder="Misol: Toshkent Davlat Universiteti"
+                               minlength="5" maxlength="120">
+                        <div class="form-text">Tashkilot nomi 5–120 belgidan iborat bo‘lishi kerak.</div>
                     </div>
+
 
                     <!-- PDF Upload -->
                     <div class="mb-4">
@@ -117,4 +111,36 @@
             </div>
         </div>
     </section>
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+                simpleUpload: {
+                    uploadUrl: '/upload/',  // your backend endpoint
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                }
+            })
+            .then(editor => {
+                console.log('Editor ready', editor);
+            })
+            .catch(error => console.error(error));
+    </script>
+
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#citations'), {
+                toolbar: ['numberedList', 'bulletedList', '|', 'undo', 'redo']
+            })
+            .then(editor => {
+                // 🪄 Automatically enable numbered list mode
+                editor.execute('numberedList');
+
+                // Optionally focus immediately
+                editor.editing.view.focus();
+            })
+            .catch(console.error);
+    </script>
 {% endblock %}

@@ -16,7 +16,7 @@ class MainView(ListView):
 
     def get_queryset(self):
         number = 6
-        return Paper.objects.filter(status=4).order_by('-published_at')[:number]
+        return Paper.objects.filter(status=4).order_by('-id')[:number]
 
 
 class AboutView(TemplateView):
@@ -49,7 +49,7 @@ class AllPapersView(ListView):
     paginate_by = 9
 
     def get_queryset(self):
-        queryset = Paper.objects.filter(status=4).order_by('-published_at')
+        queryset = Paper.objects.filter(status=4).order_by('-id')
 
         query = self.request.GET.get('q')
         category_id = self.request.GET.get('category')

@@ -9,7 +9,7 @@ body {
 /* Hero Section */
 .hero {
     text-align: center;
-    padding: 100px 20px;
+    padding: 10px 20px;
     background: linear-gradient(180deg, #ffffff 0%, #f3f4f6 100%);
 }
 
@@ -135,7 +135,7 @@ body {
 .hero {
     position: relative;
     background: url('https://plus.unsplash.com/premium_photo-1663013462043-1caddf51bae1?fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fHNjaWVuY2UlMjBsYWJ8ZW58MHx8MHx8fDA%3D&ixlib=rb-4.1.0&q=60&w=3000') center center/cover no-repeat;
-    height: 70vh;
+    height: 20vh;
     color: white;
     display: flex;
     align-items: center;

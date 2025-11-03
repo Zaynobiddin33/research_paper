@@ -59,11 +59,12 @@ nav {
     margin-bottom: 8px;
 }
 
-.status-published { background-color: #16a34a; }
+.status-published { background-color: #16a34a; color: #f9fafb; }
 .status-review { background-color: #facc15; color: #1f2937; }
-.status-decline { background-color: #fa153f; color: #f0f0f0; }
-.status-draft { background-color: #9ca3af; }
-.status-blocked { background-color: #00050e; }
+.status-decline { background-color: #dc2626; color: #f9fafb; }
+.status-draft { background-color: #9ca3af; color: #f9fafb; }
+.status-payment { background-color: #f59e0b; color: #1f2937; }
+.status-blocked { background-color: #111827; color: #f9fafb; }
 
 footer {
     text-align: center;
