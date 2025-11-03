@@ -18,7 +18,7 @@
                 <span>Yuklangan: {{ paper.published_at }}</span> ·
                 <span>Status:
                     {% if paper.status == 1 %}
-                        <span class="badge badge-status badge-draft">Tekshirilmagan</span>
+                        <span class="badge badge-status badge-draft">To'lanmagan</span>
                     {% elif paper.status == 2 %}
                         <span class="badge badge-status badge-review">Tekshiruv jarayonida</span>
                     {% elif paper.status == 3 %}
@@ -26,7 +26,7 @@
                     {% elif paper.status == 4 %}
                         <span class="badge badge-status badge-published">Nashr etilgan</span>
                     {% elif paper.status == 5 %}
-                        <span class="badge badge-status badge-payment">To`lov jarayonida</span>
+                        <span class="badge badge-status badge-payment">To'lov tekshirilmoqda</span>
                     {% elif paper.status == 6 %}
                         <span class="badge badge-status badge-blocked">Maqola bloklangan</span>
                     {% endif %}
@@ -44,7 +44,7 @@
             </p>
 
 
-            <h4 class="fw-semibold mb-3">Kirish</h4>
+            <h4 class="fw-semibold mb-3">Kirish qism (Introduction)</h4>
             <p class="text-muted mb-4">
                 {{ paper.intro }}
             </p>
@@ -61,34 +61,34 @@
             <h4 class="fw-semibold mt-4 mb-3">Fayl</h4>
             <a href="{{ paper.file.url }}" download="{{ paper.title }}.pdf"
                class="btn btn-outline-primary rounded-pill">PDF'ni yuklash</a>
-            {%if paper.status == 4%}
-            <a class="btn btn-outline-primary rounded-pill" href="{{ paper.certificate.url }}"
-                download="{{ paper.owner.first_name }}-{{ paper.owner.last_name }}.pptx"
-                aria-label="Download paper PDF">
-                Sertifikatni yuklash
-            </a>
-            {%endif%}
+            {% if paper.status == 4 %}
+                <a class="btn btn-outline-primary rounded-pill" href="{{ paper.certificate.url }}"
+                   download="{{ paper.owner.first_name }}-{{ paper.owner.last_name }}.pptx"
+                   aria-label="Download paper PDF">
+                    Sertifikatni yuklash
+                </a>
+            {% endif %}
             <hr class="my-5"/>
 
-        <h4 class="fw-semibold mb-3">Amallar</h4>
-        <div class="d-flex flex-wrap gap-3">
-            {% if paper.status == 1 or paper.status == 3%}
-                <a href="{% url 'edit_paper' paper.id %}" class="btn btn-edit">Maqolani tahrirlash</a>
+            <h4 class="fw-semibold mb-3">Amallar</h4>
+            <div class="d-flex flex-wrap gap-3">
+                {% if paper.status == 1 or paper.status == 3 %}
+                    <a href="{% url 'edit_paper' paper.id %}" class="btn btn-edit">Maqolani tahrirlash</a>
 
-            {% else %}
-                <button class="btn btn-edit" disabled>Maqolani tahrirlash</button>
-            {% endif %}
-            {%if paper.status == 3%}
-                <button type="button" class="btn btn-edit" data-bs-toggle="modal" data-bs-target="#resubmitModal">
-                Qayta yuborish {{paper.reject_count}}/5
+                {% else %}
+                    <button class="btn btn-edit" disabled>Maqolani tahrirlash</button>
+                {% endif %}
+                {% if paper.status == 3 %}
+                    <button type="button" class="btn btn-edit" data-bs-toggle="modal" data-bs-target="#resubmitModal">
+                        Qayta yuborish {{ paper.reject_count }}/5
+                    </button>
+                {% endif %}
+                <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal"
+                        data-bs-target="#deleteModal">Maqolani o'chirish
                 </button>
-            {%endif%}
-            <button type="button" class="btn btn-danger rounded-pill" data-bs-toggle="modal"
-                    data-bs-target="#deleteModal">Maqolani o'chirish
-            </button>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- 🗒️ Admin Comments Section -->
     <section class="container my-5">
@@ -144,15 +144,16 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Yopish"></button>
                 </div>
 
-      <div class="modal-body">
-        <p class="mb-3">
-          Siz haqiqatan ham ushbu maqolani qayta yubormoqchimisiz?  
-          <strong>Bitta maqola eng ko‘pi bilan 5 marta</strong> tekshiruvga yuborilishi mumkin. Siz {{paper.reject_count}} marta tekshirtirgansiz.
-        </p>
-        <p class="text-danger fw-semibold mb-0">
-          5 ta urinishdan keyin maqola <strong>bloklanadi</strong> va qayta yuborish mumkin bo‘lmaydi.
-        </p>
-      </div>
+                <div class="modal-body">
+                    <p class="mb-3">
+                        Siz haqiqatan ham ushbu maqolani qayta yubormoqchimisiz?
+                        <strong>Bitta maqola eng ko‘pi bilan 5 marta</strong> tekshiruvga yuborilishi mumkin.
+                        Siz {{ paper.reject_count }} marta tekshirtirgansiz.
+                    </p>
+                    <p class="text-danger fw-semibold mb-0">
+                        5 ta urinishdan keyin maqola <strong>bloklanadi</strong> va qayta yuborish mumkin bo‘lmaydi.
+                    </p>
+                </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Bekor qilish
