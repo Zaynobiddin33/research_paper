@@ -25,6 +25,10 @@
                         <span class="badge badge-status badge-decline">Rad etilgan</span>
                     {% elif paper.status == 4 %}
                         <span class="badge badge-status badge-published">Nashr etilgan</span>
+                    {% elif paper.status == 5 %}
+                        <span class="badge badge-status badge-payment">To`lov jarayonida</span>
+                    {% elif paper.status == 6 %}
+                        <span class="badge badge-status badge-blocked">Maqola bloklangan</span>
                     {% endif %}
             </span>
             </div>
