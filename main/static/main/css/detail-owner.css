@@ -48,10 +48,11 @@ nav {
     border-radius: 999px;
 }
 
-.badge-published { background-color: #d1fae5; color: #065f46; }
-.badge-draft { background-color: #fef3c7; color: #92400e; }
-.badge-review { background-color: #e0e7ff; color: #3730a3; }
+.badge-published { background-color: #16a34a; }
+.badge-review { background-color: #facc15; color: #1f2937; }
 .badge-decline { background-color: #fa153f; color: #f0f0f0; }
+.badge-draft { background-color: #9ca3af; }
+.badge-blocked { background-color: #00050e; }
 
 footer {
     text-align: center;
