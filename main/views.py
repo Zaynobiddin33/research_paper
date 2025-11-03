@@ -72,7 +72,7 @@ def accept_paper(request, id):
         paper.owner.first_name,
         paper.owner.last_name,
         paper.title,
-        f'http://127.0.0.1:8000/detail-paper/{paper.id}'
+        f'https://mura.uz/detail-paper/{paper.id}'
     )
     paper.certificate = certificate
 
@@ -88,7 +88,7 @@ def accept_paper(request, id):
             "submitted_time": paper.published_at.strftime('%d/%m/%y'),
             "accepted_time": datetime.now().strftime('%d/%m/%y'),
             "published_time": datetime.now().strftime('%d/%m/%y'),
-            "licence_url": f"http://127.0.0.1:8000/detail-paper/{paper.id}",
+            "licence_url": f"https://mura.uz/detail-paper/{paper.id}",
         },
         filled_template_path
     )
