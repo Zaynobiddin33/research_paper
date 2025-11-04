@@ -114,35 +114,4 @@
         </div>
     </section>
 
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
-    <script>
-        ClassicEditor
-            .create(document.querySelector('#editor'), {
-                simpleUpload: {
-                    uploadUrl: '/upload/',  // your backend endpoint
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    }
-                }
-            })
-            .then(editor => {
-                console.log('Editor ready', editor);
-            })
-            .catch(error => console.error(error));
-    </script>
-
-    <script>
-        ClassicEditor
-            .create(document.querySelector('#citations'), {
-                toolbar: ['numberedList', 'bulletedList', '|', 'undo', 'redo']
-            })
-            .then(editor => {
-                // 🪄 Automatically enable numbered list mode
-                editor.execute('numberedList');
-
-                // Optionally focus immediately
-                editor.editing.view.focus();
-            })
-            .catch(console.error);
-    </script>
 {% endblock %}
