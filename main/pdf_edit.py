@@ -132,4 +132,4 @@ def give_certificate(first_name, last_name, article_name, url):
     prs.save(f"media/certificates/{first_name}-{last_name}-{name}.pptx")
     print("file created")
     
-    return f"certificates/{first_name}-{last_name}-{name}.pptx"
+    return f"media/certificates/{first_name}-{last_name}-{name}.pptx"

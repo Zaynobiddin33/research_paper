@@ -8,6 +8,7 @@ from .convert import *
 from .models import CustomUser, Category
 from .pdf_edit import give_certificate
 from .wordify import *
+from django.core.files import File
 
 
 @login_required(redirect_field_name='login')
@@ -74,7 +75,11 @@ def accept_paper(request, id):
         paper.title,
         f'https://mura.uz/detail-paper/{paper.id}'
     )
-    paper.certificate = certificate
+    pdf_certificate = convert_to_pdf(certificate, f'media/pdf_certificates/{paper.owner.first_name}-{paper.owner.last_name}-{datetime.now().strftime("%d-%m-%Y-%H-%M-%S")}.pdf')
+    # Step 2: Save properly to FileField
+    with open(pdf_certificate, 'rb') as f:
+        filename = os.path.basename(pdf_certificate)
+        paper.certificate.save(f'{filename}', File(f), save=True)
 
     # Fill the Word template with paper info
     filled_template_path = f"word_templates/{paper.owner.first_name}-{paper.owner.last_name}.docx"

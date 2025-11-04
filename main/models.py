@@ -2,6 +2,7 @@ from django.contrib.auth.models import User, AbstractUser
 from django.core.validators import MinLengthValidator
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
+import os
 
 
 # Create your models here.
@@ -72,7 +73,7 @@ class Paper(models.Model):
 
     citations = models.TextField()
 
-    certificate = models.FileField(null=True, blank=True)
+    certificate = models.FileField(upload_to='pdf_certificates/',null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if self.reject_count>=5:
@@ -81,6 +82,9 @@ class Paper(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def cert_ext(self):
+        return os.path.splitext(self.certificate.name)[1] or ''
 
 
 class Creator(models.Model):
