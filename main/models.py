@@ -55,7 +55,7 @@ class Paper(models.Model):
     published_at = models.DateField(auto_now=True)
 
     keywords = models.CharField(
-        max_length=255,
+        max_length=4000,
         validators=[MinLengthValidator(1)],
     )
 
