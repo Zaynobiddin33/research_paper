@@ -52,8 +52,10 @@ def admin_paper_detail(request, id):
     context = {}
     if request.user.is_superuser:
         paper = models.Paper.objects.get(id=id)
+        keywords = paper.keywords.split(',')
         context = {
-            'paper': paper
+            'paper': paper,
+            'tags':keywords
         }
     else:
         return redirect('main')
