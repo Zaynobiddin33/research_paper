@@ -27,7 +27,7 @@ class UploadPaperView(LoginRequiredMixin, View):
         category = Category.objects.get(name=data['category'])
         pages = 1
 
-        Paper.objects.create(
+        ppr = Paper.objects.create(
             owner=request.user,
             title=data['title'],
             abstract=data['abstract'],
@@ -40,7 +40,7 @@ class UploadPaperView(LoginRequiredMixin, View):
             pages=pages,
             status=1
         )
-        return redirect('my_papers')
+        return redirect('apply_otp', ppr.id)
 
 
 class PaperDeleteView(LoginRequiredMixin, View):
