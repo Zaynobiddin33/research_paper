@@ -225,6 +225,7 @@ def edit_paper(request, id):
             category = Category.objects.get(name=data['category'])
             if file:
                 paper.pages = 1
+                paper.file = file
 
             paper.title = data['title']
             paper.abstract = data['abstract']
